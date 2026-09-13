@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0a0d0b">
+<link rel="manifest" href="manifest.webmanifest">
+<title>Emir Mods</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#070907;color:#eee;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+header{position:sticky;top:0;z-index:5;padding:18px 16px 12px;background:#090d0aee;backdrop-filter:blur(15px);border-bottom:1px solid #17351f}
+.logo{font-size:25px;font-weight:800}.logo b{color:#00ff66}.sub{color:#84908a;font-size:12px;margin-top:3px}
+main{padding:16px;max-width:760px;margin:auto}.search{width:100%;padding:14px 16px;border-radius:14px;border:1px solid #1c3825;background:#101510;color:#fff;font-size:15px;outline:none}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:15px}
+.card{background:#101510;border:1px solid #193722;border-radius:16px;padding:14px;min-height:125px}
+.card h3{font-size:15px;margin:7px 0}.card p{font-size:12px;color:#89938d;margin:0}.tag{display:inline-block;font-size:10px;color:#00ff66;border:1px solid #185d2e;padding:4px 7px;border-radius:20px}
+button{border:0;border-radius:12px;padding:11px 13px;background:#00ff66;color:#041008;font-weight:700;cursor:pointer}.ghost{background:#151b16;color:#ddd;border:1px solid #263a2b}
+.nav{position:fixed;bottom:0;left:0;right:0;background:#090d0aef;border-top:1px solid #17351f;display:flex;justify-content:space-around;padding:10px 4px calc(10px + env(safe-area-inset-bottom));z-index:9}
+.nav button{background:transparent;color:#9ba49e;padding:8px 12px}.nav button.active{color:#00ff66}
+.page{display:none}.page.active{display:block}.hero{padding:18px 0}.hero h1{font-size:29px;margin:0 0 6px}.hero p{color:#8d9891}
+.row{display:flex;gap:8px;align-items:center}.row>*{flex:1}.list{display:flex;flex-direction:column;gap:10px;margin-top:14px}
+.item{padding:14px;background:#101510;border:1px solid #193722;border-radius:15px}.item strong{display:block;margin-bottom:4px}.muted{color:#8d9891;font-size:12px}
+.msg{padding:13px;border-radius:14px;background:#101510;border:1px solid #193722;margin-top:10px}.unread{border-color:#00a943}
+#toast{position:fixed;left:16px;right:16px;bottom:85px;padding:13px;background:#121912;border:1px solid #245e34;border-radius:13px;display:none;text-align:center}
+</style>
+</head>
+<body>
+<header><div class="logo">EMİR <b>MODS</b></div><div class="sub">GTA V • LSPDFR • Mod Merkezi</div></header>
+<main>
+<section id="home" class="page active">
+ <div class="hero"><h1>Mod dünyasına hoş geldin.</h1><p>Modları keşfet, favorile, indir ve hesabını yönet.</p></div>
+ <input id="search" class="search" placeholder="Mod ara...">
+ <div class="grid" id="mods"></div>
+</section>
+<section id="messages" class="page">
+ <div class="hero"><h1>Mesajlar</h1><p>Gelen mesajlarını ve taleplerini kontrol et.</p></div>
+ <button onclick="loadMessages()">Mesajları yenile</button>
+ <div id="messageList" class="list"></div>
+</section>
+<section id="profile" class="page">
+ <div class="hero"><h1>Hesabım</h1><p id="loginState">Google hesabınla giriş yap.</p></div>
+ <div class="item"><strong>Google ile giriş</strong><p class="muted">Üyelik işlemleri mevcut sisteminle çalışacak şekilde hazırlanmıştır.</p><br><button onclick="login()">Giriş yap</button></div>
+ <div class="item"><strong>Üye mod yükle</strong><p class="muted">Kendi modunu Emir Mods sistemine gönderebilirsin.</p><br><button class="ghost" onclick="toast('Üye mod yükleme ekranı hazırlanıyor.')">Mod yükle</button></div>
+</section>
+<section id="admin" class="page">
+ <div class="hero"><h1>Yönetim</h1><p>Yönetici işlemleri.</p></div>
+ <div class="item"><strong>Mesaj kontrolü</strong><p class="muted">Gelen mesajları görüntüle ve yanıtla.</p><br><button onclick="show('messages')">Mesajlara git</button></div>
+ <div class="item"><strong>Üye modları</strong><p class="muted">Gönderilen modları inceleme alanı.</p><br><button class="ghost" onclick="toast('Üye modları yönetimi mevcut API ile bağlanacak.')">Aç</button></div>
+</section>
+</main>
+<nav class="nav">
+ <button class="active" data-page="home">🏠<br><small>Ana Sayfa</small></button>
+ <button data-page="messages">💬<br><small>Mesajlar</small></button>
+ <button data-page="profile">👤<br><small>Profil</small></button>
+ <button data-page="admin">⚙️<br><small>Yönetim</small></button>
+</nav>
+<div id="toast"></div>
+<script>
+const API='https://emir-mods.vercel.app/api/site';
+const demo=[
+ {name:'LSPDFR Türkçe Polis Paketi',cat:'LSPDFR',desc:'Türkçe polis araçları ve içerikleri'},
+ {name:'PDComp Türkçe',cat:'Plugin',desc:'Türkçeleştirilmiş polis/court sistemi'},
+ {name:'GTA V Polis Aracı Paketi',cat:'Araç',desc:'Yeni polis araçları'},
+ {name:'Emir Mods Özel Paket',cat:'Paket',desc:'Özel mod koleksiyonu'}
+];
+function renderMods(q=''){let a=demo.filter(x=>(x.name+x.cat+x.desc).toLowerCase().includes(q.toLowerCase()));document.querySelector('#mods').innerHTML=a.map(x=>`<div class="card"><span class="tag">${x.cat}</span><h3>${x.name}</h3><p>${x.desc}</p><br><button onclick="toast('Mod detay/indirme ekranı API bağlantısıyla açılacak.')">İncele</button></div>`).join('')}
+renderMods(); document.querySelector('#search').oninput=e=>renderMods(e.target.value);
+function show(id){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.nav button').forEach(x=>x.classList.toggle('active',x.dataset.page===id))}
+document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>show(b.dataset.page));
+function toast(t){let x=document.getElementById('toast');x.textContent=t;x.style.display='block';setTimeout(()=>x.style.display='none',2200)}
+async function loadMessages(){
+ const box=document.getElementById('messageList'); box.innerHTML='<div class="item">Mesajlar yükleniyor...</div>';
+ try{
+  const r=await fetch(API+'?action=memberMods'); // bağlantının çalıştığını test etmek için
+  await r.json();
+  box.innerHTML='<div class="msg unread"><strong>Mesaj sistemi hazır</strong><span class="muted">Mevcut API bağlantısı çalışıyor. Gerçek mesaj tablosu için Supabase RLS/admin yetkisi ayrıca bağlanmalıdır.</span></div>';
+ }catch(e){box.innerHTML='<div class="msg"><strong>Bağlantı kurulamadı</strong><span class="muted">İnternet bağlantısını veya API adresini kontrol et.</span></div>'}
+}
+function login(){toast('Google girişini gerçek uygulamada Firebase yapılandırmasıyla etkinleştireceğiz.')}
+</script>
+</body>
+</html>
