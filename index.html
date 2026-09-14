@@ -171,6 +171,26 @@ body{
 .edit-object.selected{box-shadow:0 0 0 2px rgba(0,255,120,.2),0 0 25px rgba(0,255,120,.2)}
 .edit-object i{position:absolute;right:3px;bottom:3px;font-style:normal;color:#00ff78;font-size:12px}
 
+
+/* ===== BUTON TIKLAMA DÜZELTMESİ =====
+   Ana sayfa .exact-home, display:block!important olduğu için
+   sayfa değişince görünmez olması gerekirken ekranın üstünde kalıyordu.
+   Bu görünmez hotspot katmanı yönetim butonlarının tıklamasını engelliyordu.
+*/
+.exact-home:not(.active){
+  display:none!important;
+}
+.exact-subpage:not(.active){
+  display:none!important;
+}
+#admin,
+#admin *,
+#admin button,
+#admin input,
+#admin textarea{
+  pointer-events:auto!important;
+}
+
 </style>
 
 <style id="emir-phone-background">
@@ -280,8 +300,8 @@ body.exact-shell{min-height:100vh!important;overflow-x:hidden!important}
         <div class="control-list">
           <button onclick="adminTab('overview')">📊 Genel Bakış</button>
           <button onclick="adminTab('mods')">📦 Modları Yönet</button>
-          <button onclick="adminTab('members')">👥 Üye Modları</button>
-          <button onclick="adminTab('site')">⚙️ Site İçeriği</button>
+          <button onclick="adminTab('members')">👥 Üye Modları</button><button onclick="adminTab('users')">👤 Google Kullanıcıları</button>
+          <button onclick="adminTab('site')">⚙️ Site İçeriği</button><button onclick="adminTab('categories')">📂 Kategoriler</button>
           <button onclick="adminTab('messages')">💬 Mesajlar</button>
           <button onclick="adminTab('visitors')">👀 Ziyaretçiler</button>
           <button onclick="adminTab('editor')">↔️ Taşı / Büyüt / Küçült</button>
@@ -359,6 +379,9 @@ body.exact-shell{min-height:100vh!important;overflow-x:hidden!important}
     <section id="adm-messages" class="admin-screen hidden-admin-screen"><div class="item"><h3>💬 Mesajlar</h3><button onclick="loadMessages()">🔄 Mesajları Yenile</button><div id="messageListAdmin" class="list"></div></div></section>
     <section id="adm-visitors" class="admin-screen hidden-admin-screen"><div class="item"><h3>👀 Ziyaretçiler</h3><button onclick="loadVisitorsAdmin()">🔄 Ziyaretçileri Yenile</button><div id="visitorListAdmin" class="list"></div></div></section>
 
+
+    <section id="adm-categories" class="admin-screen hidden-admin-screen"><div class="item"><h3>📂 Kategori Yönetimi</h3><input id="admCategoryNew" class="admin-input" placeholder="Yeni kategori adı"><button onclick="addCategory()">➕ Kategori Ekle</button><div id="admCategoryList" class="list"></div></div></section>
+    <section id="adm-users" class="admin-screen hidden-admin-screen"><div class="item"><h3>👤 Google Kullanıcıları</h3><button onclick="loadUsersAdmin()">🔄 Kullanıcıları Yenile</button><div id="userListAdmin" class="list"></div></div></section>
     <section id="adm-editor" class="admin-screen editor-screen">
       <div class="editor-head"><div><h2>↔️ Site Düzenleme Modu</h2><p>Bu modda seçtiğin alanları taşıyıp büyütüp küçültebileceğin yapı.</p></div><button onclick="saveEditorLayout()">💾 Düzeni Kaydet</button></div>
       <div id="editorCanvas" class="editor-canvas">
@@ -414,9 +437,9 @@ window.logout=()=>signOut(auth);
 onAuthStateChanged(auth,u=>{let owner=!!u&&(u.email||"").toLowerCase()===OWNER;$("loginState").textContent=u?`Giriş: ${u.email}`:"Google hesabınla giriş yap."; $("userInfo").textContent=u?`${u.displayName||"Kullanıcı"} • ${u.email}`:"Giriş yapılmadı."; $("adminEntry").style.display=owner?"block":"none";$("adminLogin").style.display=owner?"none":"block";$("adminPanel").style.display=owner?"block":"none";$("adminState").textContent=owner?"Yönetici hesabı doğrulandı.":"Yönetici girişi gerekiyor.";if(owner){$("adminEmail").textContent=u.email;refreshAdmin();loadMemberMods()}});
 async function apiPost(body){let u=auth.currentUser;if(!u)throw Error("Önce Google ile giriş yap.");let token=await u.getIdToken();let r=await fetch(API,{method:"POST",headers:{"Content-Type":"application/json",Authorization:"Bearer "+token},body:JSON.stringify(body)});let d=await r.json().catch(()=>({}));if(!r.ok)throw Error(d.error||"API işlemi başarısız");return d}
 window.loadMemberMods=async()=>{let box=$("memberList");box.innerHTML='<div class="item">Yükleniyor...</div>';try{let d=await apiPost({action:"memberMods"});let a=(d.mods||[]).filter(x=>x.status==="pending");box.innerHTML=a.length?a.map(m=>`<div class="item"><strong>${esc(m.name)}</strong><p class="muted">${esc(m.desc||"")}</p><p>🗂️ ${esc(m.cat||"")}</p>${m.image?`<img class="modimg" src="${esc(m.image)}">`:""}<p class="muted">Gönderen: ${esc(m.submittedBy?.email||"")}</p><div class="actions"><button onclick="review('${esc(m.id)}',true)">✅ Onayla</button><button class="danger" onclick="review('${esc(m.id)}',false)">❌ Reddet</button></div></div>`).join(""):'<div class="item">⏳ Onay bekleyen üye modu yok.</div>'}catch(e){box.innerHTML=`<div class="item">❌ ${esc(e.message)}</div>`}};
-window.review=async(id,ok)=>{try{await apiPost({action:ok?"approveMemberMod":"rejectMemberMod",id});toast(ok?"Mod onaylandı ✅":"Mod reddedildi ❌");loadMemberMods()}catch(e){toast(e.message)}};
+window.review=async(id,ok)=>{try{let rejectionReason="";if(!ok){rejectionReason=prompt("Reddetme nedeni:","Eksik bilgi veya görsel.");if(rejectionReason===null)return;if(!rejectionReason.trim())return toast("Reddetme nedeni gerekli.")}await apiPost({action:ok?"approveMemberMod":"rejectMemberMod",id,rejectionReason});toast(ok?"Mod onaylandı ✅":"Mod reddedildi ❌");await loadMemberMods();await refreshAdmin()}catch(e){toast(e.message)}};
 
-let adminData={mods:[],settings:{},visitors:[]};
+let adminData={mods:[],settings:{},categories:[],visitors:[],users:[]};
 
 window.adminTab=function(id){
   document.querySelectorAll(".admin-screen").forEach(x=>x.classList.remove("active"));
@@ -425,6 +448,8 @@ window.adminTab=function(id){
   if(id==="members")loadMemberMods();
   if(id==="messages")loadMessages();
   if(id==="visitors")loadVisitorsAdmin();
+  if(id==="users")loadUsersAdmin();
+  if(id==="categories")renderCategories();
 };
 
 window.refreshAdmin=async function(){
@@ -434,6 +459,7 @@ window.refreshAdmin=async function(){
     const data=d.data||d||{};
     adminData.mods=Array.isArray(data.mods)?data.mods:[];
     adminData.settings=data.settings||{};
+    adminData.categories=Array.isArray(data.categories)?data.categories:[];
     $("admModCount").textContent=adminData.mods.length;
     $("admSiteTitle").value=adminData.settings.siteTitle||adminData.settings.title||"";
     $("admSiteSubtitle").value=adminData.settings.siteSubtitle||adminData.settings.subtitle||"";
@@ -491,7 +517,7 @@ window.removeAdminMod=async function(i){
 
 window.saveAdminCatalog=async function(){
   try{
-    await apiPost({action:"saveSite",payload:{mods:adminData.mods,settings:adminData.settings}});
+    await apiPost({action:"saveSite",payload:{mods:adminData.mods,settings:adminData.settings,categories:adminData.categories}});
     toast("Ana site kataloğu kaydedildi ✅");
   }catch(e){toast("Kaydedilemedi: "+e.message)}
 };
@@ -516,13 +542,24 @@ window.loadVisitorsAdmin=async function(){
   }catch(e){box.innerHTML=`<div class="item">❌ ${esc(e.message)}</div>`}
 };
 
-window.loadMessages=async()=>{let b=$("messageList");b.innerHTML='<div class="item">Mesajlar kontrol ediliyor...</div>';try{let cfg=await fetch(API+"?action=siteData").then(r=>r.json());let s=cfg.data?.settings||{};if(!s.supabaseUrl||!s.supabaseAnonKey)throw Error("Supabase bağlantısı Yönetim Panelinden ayarlanmamış.");let r=await fetch(s.supabaseUrl+"/rest/v1/emir_messages?select=*&order=created_at.desc",{headers:{apikey:s.supabaseAnonKey,Authorization:"Bearer "+s.supabaseAnonKey}});let d=await r.json();if(!r.ok)throw Error(d.message||"Mesaj tablosuna erişilemedi.");b.innerHTML=Array.isArray(d)&&d.length?d.map(m=>`<div class="msg"><strong>${esc(m.name||m.email||"Kullanıcı")}</strong><p>${esc(m.message||m.content||"")}</p><span class="muted">${esc(m.created_at||"")}</span></div>`).join(""):'<div class="item">📭 Mesaj bulunamadı.</div>'}catch(e){b.innerHTML=`<div class="item">⚠️ ${esc(e.message)}<br><br><span class="muted">Mesaj tablosu RLS ile korunuyorsa bu alan için sunucu tarafında güvenli mesaj API'si eklememiz gerekir.</span></div>`}};
+window.loadMessages=async()=>{let b=$("messageListAdmin");b.innerHTML='<div class="item">Mesajlar kontrol ediliyor...</div>';try{let d=await apiPost({action:"messages"});let a=d.messages||[];b.innerHTML=a.length?a.map(m=>`<div class="msg"><strong>${esc(m.name||m.email||"Kullanıcı")}</strong><p>${esc(m.message||m.content||"")}</p><span class="muted">${esc(new Date(Number(m.createdAt||0)).toLocaleString("tr-TR"))}</span><button class="danger" onclick="deleteAdminMessage('${esc(m.id)}')">🗑️ Sil</button></div>`).join(""):'<div class="item">📭 Sunucu mesajı yok.</div>'}catch(e){b.innerHTML=`<div class="item">⚠️ ${esc(e.message)}</div>`}};
+window.deleteAdminMessage=async id=>{if(!confirm("Bu mesaj silinsin mi?"))return;try{await apiPost({action:"deleteMessage",id});toast("Mesaj silindi ✅");loadMessages()}catch(e){toast(e.message)}};
+
+window.loadUsersAdmin=async()=>{const b=$("userListAdmin");b.innerHTML='<div class="item">Kullanıcılar yükleniyor...</div>';try{const d=await apiPost({action:"users"});adminData.users=d.users||[];b.innerHTML=adminData.users.length?adminData.users.map(u=>`<div class="msg"><strong>${esc(u.displayName||"İsimsiz")}</strong><p>${esc(u.email||"")}</p><span class="muted">${u.disabled?'🔴 Devre dışı':'🟢 Aktif'} · ${esc(u.lastSignInAt||u.createdAt||'')}</span><div class="actions"><button onclick="toggleUser('${esc(u.uid)}',${!u.disabled})">${u.disabled?'🟢 Aktifleştir':'⛔ Devre dışı bırak'}</button><button class="danger" onclick="deleteAdminUser('${esc(u.uid)}')">🗑️ Sil</button></div></div>`).join(""):'<div class="item">📭 Google kullanıcısı bulunamadı.</div>'}catch(e){b.innerHTML=`<div class="item">❌ ${esc(e.message)}</div>`}};
+window.toggleUser=async(uid,disabled)=>{try{await apiPost({action:"disableUser",uid,disabled});toast(disabled?'Kullanıcı devre dışı bırakıldı.':'Kullanıcı aktifleştirildi.');loadUsersAdmin()}catch(e){toast(e.message)}};
+window.deleteAdminUser=async uid=>{if(!confirm("Bu Google kullanıcısı kalıcı olarak silinsin mi?"))return;try{await apiPost({action:"deleteUser",uid});toast("Kullanıcı silindi ✅");loadUsersAdmin()}catch(e){toast(e.message)}};
+
+window.renderCategories=()=>{const b=$("admCategoryList");if(!b)return;const a=adminData.categories||[];b.innerHTML=a.length?a.map((c,i)=>`<div class="admin-mod-row"><strong>${esc(c)}</strong><div class="actions"><button onclick="renameCategory(${i})">✏️ Yeniden Adlandır</button><button class="danger" onclick="removeCategory(${i})">🗑️ Sil</button></div></div>`).join(""):'<div class="item">📭 Kategori yok.</div>'};
+window.addCategory=async()=>{const v=$("admCategoryNew").value.trim();if(!v)return toast("Kategori adı gerekli.");if((adminData.categories||[]).some(x=>x.toLowerCase()===v.toLowerCase()))return toast("Bu kategori zaten var.");adminData.categories.push(v);$("admCategoryNew").value="";await saveAdminCatalog();renderCategories()};
+window.renameCategory=async i=>{const old=adminData.categories[i];const v=prompt("Kategori adı:",old);if(v===null)return;if(!v.trim())return;adminData.categories[i]=v.trim();await saveAdminCatalog();renderCategories()};
+window.removeCategory=async i=>{const old=adminData.categories[i];if(!confirm(`“${old}” kategorisi silinsin mi?`))return;adminData.categories.splice(i,1);await saveAdminCatalog();renderCategories()};
 
 function openLiveSite(){ window.open("https://emir-mods.vercel.app/","_blank"); }
-function saveEditorLayout(){
+async function saveEditorLayout(){
   const data=[...document.querySelectorAll("#editorCanvas .edit-object")].map(x=>({name:x.dataset.name,left:x.style.left,top:x.style.top,width:x.style.width,height:x.style.height}));
   localStorage.setItem("emirModsEditorLayout",JSON.stringify(data));
-  toast("Düzen yerel olarak kaydedildi. API'ye bağlama aşamasında bu düzen siteye aktarılacak.");
+  try{await apiPost({action:"saveEditorLayout",layout:data});toast("Düzen canlı site ayarlarına kaydedildi ✅");}
+  catch(e){toast("Düzen kaydedilemedi: "+e.message)}
 }
 (function initEditor(){
   const canvas=document.getElementById("editorCanvas"); if(!canvas) return;
