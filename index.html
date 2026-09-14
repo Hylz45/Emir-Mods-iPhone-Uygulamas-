@@ -1,82 +1,51 @@
 <!doctype html>
 <html lang="tr">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#0a0d0b">
-<link rel="manifest" href="manifest.webmanifest">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#070907"><link rel="manifest" href="manifest.webmanifest">
 <title>Emir Mods</title>
 <style>
-*{box-sizing:border-box}body{margin:0;background:#070907;color:#eee;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+*{box-sizing:border-box}body{margin:0;background:#070907;color:#eee;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;padding-bottom:82px}
 header{position:sticky;top:0;z-index:5;padding:18px 16px 12px;background:#090d0aee;backdrop-filter:blur(15px);border-bottom:1px solid #17351f}
-.logo{font-size:25px;font-weight:800}.logo b{color:#00ff66}.sub{color:#84908a;font-size:12px;margin-top:3px}
-main{padding:16px;max-width:760px;margin:auto}.search{width:100%;padding:14px 16px;border-radius:14px;border:1px solid #1c3825;background:#101510;color:#fff;font-size:15px;outline:none}
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:15px}
-.card{background:#101510;border:1px solid #193722;border-radius:16px;padding:14px;min-height:125px}
-.card h3{font-size:15px;margin:7px 0}.card p{font-size:12px;color:#89938d;margin:0}.tag{display:inline-block;font-size:10px;color:#00ff66;border:1px solid #185d2e;padding:4px 7px;border-radius:20px}
+.logo{font-size:25px;font-weight:800}.logo b{color:#00ff66}.sub,.muted{color:#89938d;font-size:12px}
+main{padding:16px;max-width:760px;margin:auto}.hero{padding:12px 0 16px}.hero h1{font-size:29px;margin:0 0 6px}.search{width:100%;padding:14px 16px;border-radius:14px;border:1px solid #1c3825;background:#101510;color:#fff;font-size:15px;outline:none}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:15px}.card,.item{background:#101510;border:1px solid #193722;border-radius:16px;padding:14px}.card{min-height:140px}.card h3{font-size:15px;margin:7px 0}.tag{display:inline-block;font-size:10px;color:#00ff66;border:1px solid #185d2e;padding:4px 7px;border-radius:20px}
 button{border:0;border-radius:12px;padding:11px 13px;background:#00ff66;color:#041008;font-weight:700;cursor:pointer}.ghost{background:#151b16;color:#ddd;border:1px solid #263a2b}
-.nav{position:fixed;bottom:0;left:0;right:0;background:#090d0aef;border-top:1px solid #17351f;display:flex;justify-content:space-around;padding:10px 4px calc(10px + env(safe-area-inset-bottom));z-index:9}
-.nav button{background:transparent;color:#9ba49e;padding:8px 12px}.nav button.active{color:#00ff66}
-.page{display:none}.page.active{display:block}.hero{padding:18px 0}.hero h1{font-size:29px;margin:0 0 6px}.hero p{color:#8d9891}
-.row{display:flex;gap:8px;align-items:center}.row>*{flex:1}.list{display:flex;flex-direction:column;gap:10px;margin-top:14px}
-.item{padding:14px;background:#101510;border:1px solid #193722;border-radius:15px}.item strong{display:block;margin-bottom:4px}.muted{color:#8d9891;font-size:12px}
-.msg{padding:13px;border-radius:14px;background:#101510;border:1px solid #193722;margin-top:10px}.unread{border-color:#00a943}
-#toast{position:fixed;left:16px;right:16px;bottom:85px;padding:13px;background:#121912;border:1px solid #245e34;border-radius:13px;display:none;text-align:center}
+.nav{position:fixed;bottom:0;left:0;right:0;background:#090d0aef;border-top:1px solid #17351f;display:flex;justify-content:space-around;padding:10px 4px calc(10px + env(safe-area-inset-bottom));z-index:9}.nav button{background:transparent;color:#9ba49e;padding:8px 12px}.nav button.active{color:#00ff66}
+.page{display:none}.page.active{display:block}.list{display:flex;flex-direction:column;gap:10px;margin-top:14px}.msg{padding:13px;border-radius:14px;background:#101510;border:1px solid #193722}.status{padding:10px;border-radius:12px;background:#111711;margin:10px 0}.ok{border-color:#00a943}.danger{background:#301414;color:#fff;border:1px solid #713131}.actions{display:flex;gap:8px;margin-top:10px}.actions>*{flex:1}#toast{position:fixed;left:16px;right:16px;bottom:85px;padding:13px;background:#121912;border:1px solid #245e34;border-radius:13px;display:none;text-align:center;z-index:20}
+img.modimg{width:100%;max-height:190px;object-fit:cover;border-radius:12px;margin-top:8px}
 </style>
 </head>
 <body>
 <header><div class="logo">EMİR <b>MODS</b></div><div class="sub">GTA V • LSPDFR • Mod Merkezi</div></header>
 <main>
-<section id="home" class="page active">
- <div class="hero"><h1>Mod dünyasına hoş geldin.</h1><p>Modları keşfet, favorile, indir ve hesabını yönet.</p></div>
- <input id="search" class="search" placeholder="Mod ara...">
- <div class="grid" id="mods"></div>
-</section>
-<section id="messages" class="page">
- <div class="hero"><h1>Mesajlar</h1><p>Gelen mesajlarını ve taleplerini kontrol et.</p></div>
- <button onclick="loadMessages()">Mesajları yenile</button>
- <div id="messageList" class="list"></div>
-</section>
-<section id="profile" class="page">
- <div class="hero"><h1>Hesabım</h1><p id="loginState">Google hesabınla giriş yap.</p></div>
- <div class="item"><strong>Google ile giriş</strong><p class="muted">Üyelik işlemleri mevcut sisteminle çalışacak şekilde hazırlanmıştır.</p><br><button onclick="login()">Giriş yap</button></div>
- <div class="item"><strong>Üye mod yükle</strong><p class="muted">Kendi modunu Emir Mods sistemine gönderebilirsin.</p><br><button class="ghost" onclick="toast('Üye mod yükleme ekranı hazırlanıyor.')">Mod yükle</button></div>
-</section>
-<section id="admin" class="page">
- <div class="hero"><h1>Yönetim</h1><p>Yönetici işlemleri.</p></div>
- <div class="item"><strong>Mesaj kontrolü</strong><p class="muted">Gelen mesajları görüntüle ve yanıtla.</p><br><button onclick="show('messages')">Mesajlara git</button></div>
- <div class="item"><strong>Üye modları</strong><p class="muted">Gönderilen modları inceleme alanı.</p><br><button class="ghost" onclick="toast('Üye modları yönetimi mevcut API ile bağlanacak.')">Aç</button></div>
-</section>
+<section id="home" class="page active"><div class="hero"><h1>Mod dünyasına hoş geldin.</h1><p class="muted">Modları keşfet ve hesabını yönet.</p></div><input id="search" class="search" placeholder="Mod ara..."><div class="grid" id="mods"></div></section>
+<section id="messages" class="page"><div class="hero"><h1>Mesajlar</h1><p class="muted">Mesaj sistemine bağlı yönetim ekranı.</p></div><button onclick="loadMessages()">🔄 Yenile</button><div id="messageList" class="list"></div></section>
+<section id="profile" class="page"><div class="hero"><h1>Hesabım</h1><p id="loginState" class="muted">Google hesabınla giriş yap.</p></div><div class="item"><strong>Google ile giriş</strong><p class="muted">Mevcut Emir Mods Firebase hesabın kullanılır.</p><br><button onclick="login()">🔐 Google ile Giriş</button></div><div class="item" style="margin-top:10px"><strong>Oturum</strong><p id="userInfo" class="muted">Giriş yapılmadı.</p><br><button class="ghost" onclick="logout()">Çıkış</button></div></section>
+<section id="admin" class="page"><div class="hero"><h1>🛠️ Yönetim</h1><p id="adminState" class="muted">Yönetici girişi gerekiyor.</p></div><div id="adminLogin" class="item"><strong>Yönetici girişi</strong><p class="muted">Yalnızca tanımlı yönetici Gmail hesabı erişebilir.</p><br><button onclick="login()">🔐 Yönetici Gmail ile Giriş</button></div><div id="adminPanel" style="display:none"><div class="status ok"><b>✅ Yönetici doğrulandı</b><div id="adminEmail" class="muted"></div></div><div class="item"><strong>📦 Bekleyen Üye Modları</strong><p class="muted">Gerçek API'den gelir. Onay veya red işlemi sunucuda yapılır.</p><button onclick="loadMemberMods()">Yenile</button></div><div id="memberList" class="list"></div><div class="item" style="margin-top:10px"><strong>💬 Mesaj Kontrolü</strong><p class="muted">Mesajlar sekmesine geç.</p><button onclick="show('messages')">Mesajları Aç</button></div></div></section>
 </main>
-<nav class="nav">
- <button class="active" data-page="home">🏠<br><small>Ana Sayfa</small></button>
- <button data-page="messages">💬<br><small>Mesajlar</small></button>
- <button data-page="profile">👤<br><small>Profil</small></button>
- <button data-page="admin">⚙️<br><small>Yönetim</small></button>
-</nav>
-<div id="toast"></div>
-<script>
-const API='https://emir-mods.vercel.app/api/site';
-const demo=[
- {name:'LSPDFR Türkçe Polis Paketi',cat:'LSPDFR',desc:'Türkçe polis araçları ve içerikleri'},
- {name:'PDComp Türkçe',cat:'Plugin',desc:'Türkçeleştirilmiş polis/court sistemi'},
- {name:'GTA V Polis Aracı Paketi',cat:'Araç',desc:'Yeni polis araçları'},
- {name:'Emir Mods Özel Paket',cat:'Paket',desc:'Özel mod koleksiyonu'}
-];
-function renderMods(q=''){let a=demo.filter(x=>(x.name+x.cat+x.desc).toLowerCase().includes(q.toLowerCase()));document.querySelector('#mods').innerHTML=a.map(x=>`<div class="card"><span class="tag">${x.cat}</span><h3>${x.name}</h3><p>${x.desc}</p><br><button onclick="toast('Mod detay/indirme ekranı API bağlantısıyla açılacak.')">İncele</button></div>`).join('')}
-renderMods(); document.querySelector('#search').oninput=e=>renderMods(e.target.value);
-function show(id){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.nav button').forEach(x=>x.classList.toggle('active',x.dataset.page===id))}
-document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>show(b.dataset.page));
-function toast(t){let x=document.getElementById('toast');x.textContent=t;x.style.display='block';setTimeout(()=>x.style.display='none',2200)}
-async function loadMessages(){
- const box=document.getElementById('messageList'); box.innerHTML='<div class="item">Mesajlar yükleniyor...</div>';
- try{
-  const r=await fetch(API+'?action=memberMods'); // bağlantının çalıştığını test etmek için
-  await r.json();
-  box.innerHTML='<div class="msg unread"><strong>Mesaj sistemi hazır</strong><span class="muted">Mevcut API bağlantısı çalışıyor. Gerçek mesaj tablosu için Supabase RLS/admin yetkisi ayrıca bağlanmalıdır.</span></div>';
- }catch(e){box.innerHTML='<div class="msg"><strong>Bağlantı kurulamadı</strong><span class="muted">İnternet bağlantısını veya API adresini kontrol et.</span></div>'}
-}
-function login(){toast('Google girişini gerçek uygulamada Firebase yapılandırmasıyla etkinleştireceğiz.')}
+<nav class="nav"><button class="active" data-page="home">🏠<br><small>Ana Sayfa</small></button><button data-page="messages">💬<br><small>Mesajlar</small></button><button data-page="profile">👤<br><small>Profil</small></button><button data-page="admin">⚙️<br><small>Yönetim</small></button></nav><div id="toast"></div>
+<script type="module">
+import {initializeApp,getApps} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+import {getAuth,GoogleAuthProvider,signInWithPopup,onAuthStateChanged,signOut} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
+const API="https://emir-mods.vercel.app/api/site";
+const OWNER="onurkayrakli45@gmail.com";
+const config={apiKey:"AIzaSyAw-RuOox1mHUsmBSwogrkIIguzUJYJtFw",authDomain:"emir-mods.firebaseapp.com",projectId:"emir-mods",storageBucket:"emir-mods.firebasestorage.app",messagingSenderId:"590122713490",appId:"1:590122713490:web:f08cb5982b848ed9bc14b"};
+const app=getApps().find(a=>a.name==="emirPhone")||initializeApp(config,"emirPhone"),auth=getAuth(app);
+const demo=[{name:"LSPDFR Türkçe Polis Paketi",cat:"LSPDFR",desc:"Türkçe polis araçları ve içerikleri"},{name:"PDComp Türkçe",cat:"Plugin",desc:"Türkçeleştirilmiş polis/court sistemi"},{name:"GTA V Polis Aracı Paketi",cat:"Araç",desc:"Yeni polis araçları"},{name:"Emir Mods Özel Paket",cat:"Paket",desc:"Özel mod koleksiyonu"}];
+const $=id=>document.getElementById(id);
+function esc(x){return String(x??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function render(q=""){let a=demo.filter(x=>(x.name+x.cat+x.desc).toLowerCase().includes(q.toLowerCase()));$("mods").innerHTML=a.map(x=>`<div class="card"><span class="tag">${esc(x.cat)}</span><h3>${esc(x.name)}</h3><p class="muted">${esc(x.desc)}</p><br><button onclick="toast('Mod detay/indirme bağlantısı bir sonraki API aşamasında açılacak.')">İncele</button></div>`).join("")}
+render();$("search").oninput=e=>render(e.target.value);
+window.show=id=>{document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));$(id).classList.add("active");document.querySelectorAll(".nav button").forEach(x=>x.classList.toggle("active",x.dataset.page===id));if(id==="admin"&&auth.currentUser&&auth.currentUser.email.toLowerCase()===OWNER)loadMemberMods()};
+document.querySelectorAll(".nav button").forEach(b=>b.onclick=()=>show(b.dataset.page));
+window.toast=t=>{let x=$("toast");x.textContent=t;x.style.display="block";setTimeout(()=>x.style.display="none",2200)};
+window.login=async()=>{try{const r=await signInWithPopup(auth,new GoogleAuthProvider());if((r.user.email||"").toLowerCase()!==OWNER){toast("Bu hesap yönetici hesabı değil.");}}catch(e){toast("Google giriş hatası: "+e.message)}};
+window.logout=()=>signOut(auth);
+onAuthStateChanged(auth,u=>{let owner=!!u&&(u.email||"").toLowerCase()===OWNER;$("loginState").textContent=u?`Giriş: ${u.email}`:"Google hesabınla giriş yap."; $("userInfo").textContent=u?`${u.displayName||"Kullanıcı"} • ${u.email}`:"Giriş yapılmadı."; $("adminLogin").style.display=owner?"none":"block";$("adminPanel").style.display=owner?"block":"none";$("adminState").textContent=owner?"Yönetici hesabı doğrulandı.":"Yönetici girişi gerekiyor.";if(owner){$("adminEmail").textContent=u.email;loadMemberMods()}});
+async function apiPost(body){let u=auth.currentUser;if(!u)throw Error("Önce Google ile giriş yap.");let token=await u.getIdToken();let r=await fetch(API,{method:"POST",headers:{"Content-Type":"application/json",Authorization:"Bearer "+token},body:JSON.stringify(body)});let d=await r.json().catch(()=>({}));if(!r.ok)throw Error(d.error||"API işlemi başarısız");return d}
+window.loadMemberMods=async()=>{let box=$("memberList");box.innerHTML='<div class="item">Yükleniyor...</div>';try{let d=await apiPost({action:"memberMods"});let a=(d.mods||[]).filter(x=>x.status==="pending");box.innerHTML=a.length?a.map(m=>`<div class="item"><strong>${esc(m.name)}</strong><p class="muted">${esc(m.desc||"")}</p><p>🗂️ ${esc(m.cat||"")}</p>${m.image?`<img class="modimg" src="${esc(m.image)}">`:""}<p class="muted">Gönderen: ${esc(m.submittedBy?.email||"")}</p><div class="actions"><button onclick="review('${esc(m.id)}',true)">✅ Onayla</button><button class="danger" onclick="review('${esc(m.id)}',false)">❌ Reddet</button></div></div>`).join(""):'<div class="item">⏳ Onay bekleyen üye modu yok.</div>'}catch(e){box.innerHTML=`<div class="item">❌ ${esc(e.message)}</div>`}};
+window.review=async(id,ok)=>{try{await apiPost({action:ok?"approveMemberMod":"rejectMemberMod",id});toast(ok?"Mod onaylandı ✅":"Mod reddedildi ❌");loadMemberMods()}catch(e){toast(e.message)}};
+window.loadMessages=async()=>{let b=$("messageList");b.innerHTML='<div class="item">Mesajlar kontrol ediliyor...</div>';try{let cfg=await fetch(API+"?action=siteData").then(r=>r.json());let s=cfg.data?.settings||{};if(!s.supabaseUrl||!s.supabaseAnonKey)throw Error("Supabase bağlantısı Yönetim Panelinden ayarlanmamış.");let r=await fetch(s.supabaseUrl+"/rest/v1/emir_messages?select=*&order=created_at.desc",{headers:{apikey:s.supabaseAnonKey,Authorization:"Bearer "+s.supabaseAnonKey}});let d=await r.json();if(!r.ok)throw Error(d.message||"Mesaj tablosuna erişilemedi.");b.innerHTML=Array.isArray(d)&&d.length?d.map(m=>`<div class="msg"><strong>${esc(m.name||m.email||"Kullanıcı")}</strong><p>${esc(m.message||m.content||"")}</p><span class="muted">${esc(m.created_at||"")}</span></div>`).join(""):'<div class="item">📭 Mesaj bulunamadı.</div>'}catch(e){b.innerHTML=`<div class="item">⚠️ ${esc(e.message)}<br><br><span class="muted">Mesaj tablosu RLS ile korunuyorsa bu alan için sunucu tarafında güvenli mesaj API'si eklememiz gerekir.</span></div>`}};
 </script>
-</body>
-</html>
+</body></html>
