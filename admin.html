@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Emir Mods | Yönetim Paneli</title>
+<style>
+:root{--bg:#06090b;--panel:#0d1418;--panel2:#111b20;--line:#20302a;--txt:#f4f7fa;--muted:#91a09a;--g:#00ff66;--g2:#00c957;--red:#ff4358;--yellow:#ffd84a;--blue:#55a7ff}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(circle at 50% -10%,rgba(0,255,102,.08),transparent 38%),var(--bg);color:var(--txt);font-family:Arial,Segoe UI,sans-serif}
+button,input,textarea,select{font:inherit}button{cursor:pointer}.hidden{display:none!important}.muted{color:var(--muted)}
+.shell{max-width:1450px;margin:auto;padding:22px}.top{position:sticky;top:0;z-index:50;background:rgba(6,9,11,.94);backdrop-filter:blur(15px);border-bottom:1px solid var(--line)}
+.topin{max-width:1450px;margin:auto;padding:16px 22px;display:flex;align-items:center;gap:18px}.brand{font-size:27px;font-weight:1000;white-space:nowrap}.brand span{color:var(--g)}.owner{margin-left:auto;color:var(--g);font-size:12px;font-weight:800}
+.logout{border:1px solid #ff435866;background:#1b0d11;color:#ff7585;border-radius:10px;padding:9px 13px;font-weight:900}
+.login{min-height:70vh;display:grid;place-items:center}.loginbox{width:min(520px,100%);background:linear-gradient(145deg,#10191d,#090f12);border:1px solid rgba(0,255,102,.35);border-radius:24px;padding:34px;box-shadow:0 25px 80px rgba(0,0,0,.45);text-align:center}.crown{font-size:55px}.loginbox h1{margin:8px 0}.primary{border:0;background:var(--g);color:#031008;border-radius:11px;padding:12px 18px;font-weight:1000}.secondary{border:1px solid #2c3b43;background:#172128;color:#fff;border-radius:11px;padding:11px 15px;font-weight:900}.danger{border:1px solid #ff435866;background:#241015;color:#ff7180;border-radius:11px;padding:10px 14px;font-weight:900}
+.layout{display:grid;grid-template-columns:245px 1fr;gap:18px}.side{position:sticky;top:82px;height:calc(100vh - 105px);background:linear-gradient(180deg,#0d1519,#091013);border:1px solid var(--line);border-radius:20px;padding:14px;overflow:auto}.side h3{margin:8px 10px 14px;color:var(--g);font-size:12px;letter-spacing:1px}.side button{display:flex;width:100%;align-items:center;gap:10px;border:1px solid transparent;background:transparent;color:#b7c2bd;border-radius:11px;padding:12px;margin:4px 0;text-align:left;font-weight:900}.side button.active,.side button:hover{background:#102019;border-color:#214934;color:#fff}.side small{display:block;padding:12px 10px;color:#65746d;line-height:1.5}
+.content{min-width:0}.hero{background:linear-gradient(135deg,#101b18,#0b1216);border:1px solid rgba(0,255,102,.3);border-radius:22px;padding:24px;margin-bottom:16px}.hero h1{margin:0 0 6px;font-size:32px}.hero p{margin:0;color:var(--muted)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}.stat{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px}.stat b{font-size:28px}.stat span{display:block;color:var(--muted);font-size:12px;margin-top:5px}
+.section{display:none}.section.active{display:block}.panel{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:20px;margin-bottom:16px}.panelhead{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.panel h2{margin:0 0 6px}.panel h3{margin:18px 0 10px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.field label{display:block;color:var(--muted);font-size:12px;font-weight:800;margin:0 0 6px}.field input,.field textarea,.field select{width:100%;background:#080e11;color:#fff;border:1px solid #2a3a42;border-radius:10px;padding:11px;outline:0}.field textarea{min-height:110px;resize:vertical}.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--g)}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.search{width:100%;background:#080e11;color:#fff;border:1px solid #2a3a42;border-radius:10px;padding:12px;outline:0}.list{display:grid;gap:10px;margin-top:14px}.item{background:#0a1114;border:1px solid #1e2d31;border-radius:14px;padding:14px}.itemtop{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.tag{display:inline-block;border:1px solid #2c4939;color:var(--g);background:#0d1d14;border-radius:99px;padding:4px 8px;font-size:10px;font-weight:900}.status{display:inline-block;border-radius:99px;padding:5px 9px;font-size:10px;font-weight:1000}.pending{background:#332d0d;color:var(--yellow)}.approved{background:#0b301d;color:var(--g)}.rejected{background:#351018;color:#ff7585}
+.modgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px}.modcard{background:#0a1114;border:1px solid #1e2d31;border-radius:15px;overflow:hidden}.modcard img{width:100%;height:145px;object-fit:cover;background:#050809}.modbody{padding:13px}.modbody h3{margin:0 0 5px;font-size:15px}.modbody p{color:var(--muted);font-size:12px;line-height:1.45;min-height:35px}.modactions{display:flex;gap:6px;flex-wrap:wrap}.modactions button{padding:7px 9px;border-radius:8px;font-size:11px;border:1px solid #2b3a42;background:#111a20;color:#fff}
+.dev{background:#0a1114;border:1px solid #1e2d31;border-radius:14px;padding:14px;margin-top:10px}.devrow{display:flex;gap:8px}.devrow input{flex:1}
+.visitor{display:grid;grid-template-columns:1.1fr 1fr 1.5fr 2fr;gap:10px;padding:12px;border-bottom:1px solid #1c292e;font-size:12px}.visitor:first-child{color:var(--g);font-weight:900}.table{overflow:auto}
+.notice{padding:12px 14px;border:1px solid #254334;background:#0c1a13;border-radius:11px;color:#b8c9c0;font-size:12px;margin-top:12px}.toast{position:fixed;right:20px;bottom:20px;z-index:200;padding:13px 16px;border-radius:12px;background:#0d1d14;border:1px solid var(--g);color:#fff;box-shadow:0 15px 45px #0008}
+@media(max-width:1050px){.layout{grid-template-columns:1fr}.side{position:relative;top:0;height:auto;display:flex;overflow:auto;gap:5px}.side h3,.side small{display:none}.side button{width:auto;white-space:nowrap}.stats{grid-template-columns:repeat(2,1fr)}.modgrid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:650px){.shell{padding:12px}.topin{padding:12px}.brand{font-size:21px}.owner{display:none}.grid,.grid3,.modgrid{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}.visitor{grid-template-columns:1fr}.hero h1{font-size:25px}}
+</style>
+</head>
+<body>
+<header class="top"><div class="topin"><div class="brand">EMİR <span>MODS</span> <small style="color:#66756e;font-size:11px">YÖNETİM</small></div><div id="owner" class="owner"></div><button id="logoutBtn" class="logout hidden">ÇIKIŞ</button></div></header>
+
+<main class="shell">
+<div id="login" class="login">
+  <div class="loginbox">
+    <div class="crown">👑</div><h1>Yönetim Paneli</h1>
+    <p class="muted">Emir Mods'un tüm yönetimini tek yerden kontrol et.</p>
+    <button id="googleBtn" class="primary" style="margin-top:18px">🔐 Google ile Giriş Yap</button>
+    <p id="loginMsg" class="muted" style="margin-top:12px"></p>
+  </div>
+</div>
+
+<div id="app" class="layout hidden">
+  <aside class="side">
+    <h3>EMİR MODS</h3>
+    <button class="active" data-tab="dashboard">📊 Genel Bakış</button>
+    <button data-tab="site">⚙️ Site Ayarları</button>
+    <button data-tab="mods">📦 Mod Yönetimi</button>
+    <button data-tab="member">👥 Üye Modları</button>
+    <button data-tab="visitors">👀 Ziyaretçiler</button>
+    <button data-tab="development">🚧 Yapım Aşaması</button>
+    <button data-tab="messages">🔔 Bildirimler</button>
+    <small>Google hesabın sunucu tarafında ADMIN_GOOGLE_EMAIL ile doğrulanır.</small>
+  </aside>
+
+  <section class="content">
+    <div class="hero"><h1>Kontrol Merkezi 👑</h1><p>Modlar, üyeler, site içerikleri ve ziyaretçiler burada yönetilir.</p></div>
+
+    <div id="dashboard" class="section active">
+      <div class="stats">
+        <div class="stat"><b id="statMods">0</b><span>Toplam Mod</span></div>
+        <div class="stat"><b id="statMembers">0</b><span>Bekleyen Üye Modu</span></div>
+        <div class="stat"><b id="statVisitors">0</b><span>Son Ziyaretçi</span></div>
+        <div class="stat"><b id="statDev">0</b><span>Yapım Aşaması</span></div>
+      </div>
+      <div class="panel"><div class="panelhead"><div><h2>Hızlı İşlemler</h2><p class="muted">Yönetimde en sık kullanacağın alanlar.</p></div></div>
+        <div class="actions">
+          <button class="primary" onclick="openTab('mods')">📦 Modları Yönet</button>
+          <button class="secondary" onclick="openTab('member')">👥 Üye Modlarını İncele</button>
+          <button class="secondary" onclick="openTab('site')">⚙️ Siteyi Düzenle</button>
+          <button class="secondary" onclick="openTab('visitors')">👀 Ziyaretçileri Gör</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="site" class="section">
+      <div class="panel"><div class="panelhead"><div><h2>⚙️ Site Ayarları</h2><p class="muted">Ana sayfa, YouTube, menü, iletişim ve ödeme alanlarını yönet.</p></div><button class="primary" onclick="saveSite()">💾 Kaydet</button></div>
+        <div class="grid" style="margin-top:16px">
+          <div class="field"><label>Site adı</label><input id="siteName"></div><div class="field"><label>Discord adresi</label><input id="discordUrl"></div>
+          <div class="field"><label>Ana sayfa başlığı</label><input id="heroTitle"></div><div class="field"><label>Ana sayfa açıklaması</label><input id="heroText"></div>
+          <div class="field"><label>YouTube başlığı</label><input id="youtubeTitle"></div><div class="field"><label>YouTube açıklaması</label><textarea id="youtubeText"></textarea></div>
+          <div class="field"><label>YouTube giriş butonu</label><input id="youtubeLoginText"></div><div class="field"><label>YouTube kontrol butonu</label><input id="youtubeCheckText"></div>
+          <div class="field"><label>YouTube durum yazısı</label><input id="youtubeStatusText"></div><div class="field"><label>Kategoriler başlığı</label><input id="categoriesTitle"></div>
+          <div class="field"><label>Kategoriler açıklaması</label><input id="categoriesText"></div><div class="field"><label>Modlar başlığı</label><input id="modsTitle"></div>
+          <div class="field"><label>Modlar açıklaması</label><textarea id="modsText"></textarea></div><div class="field"><label>Araç listesi başlığı</label><input id="vehicleTitle"></div>
+          <div class="field"><label>Araç listesi açıklaması</label><textarea id="vehicleText"></textarea></div><div class="field"><label>Destek metni</label><textarea id="supportText"></textarea></div>
+          <div class="field"><label>Hakkımızda</label><textarea id="aboutText"></textarea></div><div class="field"><label>İletişim</label><textarea id="contactText"></textarea></div>
+          <div class="field"><label>Ücretli kurulum</label><textarea id="paidSetupText"></textarea></div><div class="field"><label>Yasal metin</label><textarea id="legalText"></textarea></div>
+          <div class="field"><label>Alt bilgi</label><input id="footerText"></div><div class="field"><label>Admin Gmail</label><input id="adminGoogleEmail" type="email"></div>
+        </div>
+        <h3>Üst Menü</h3><div class="grid3" id="navGrid"></div>
+        <h3>Kategoriler</h3><div class="field"><textarea id="categories" placeholder="Her satıra bir kategori"></textarea></div>
+        <h3>Kategori Kartları</h3><div class="field"><textarea id="categoryCards" placeholder="Başlık | Açıklama"></textarea></div>
+        <h3>💬 WhatsApp & Sohbet</h3><div class="grid">
+          <div class="field"><label>WhatsApp numarası</label><input id="whatsappNumber"></div><div class="field"><label>WhatsApp mesajı</label><input id="whatsappMessage"></div>
+          <div class="field"><label>Sohbet başlığı</label><input id="chatTitle"></div><div class="field"><label>Supabase URL</label><input id="supabaseUrl"></div>
+          <div class="field"><label>Supabase Anon Key</label><input id="supabaseAnonKey"></div><div class="field"><label>Sohbet karşılama</label><textarea id="chatWelcome"></textarea></div>
+        </div>
+        <div class="actions"><label><input type="checkbox" id="whatsappEnabled"> WhatsApp'ı göster</label><label><input type="checkbox" id="userChatEnabled"> Kullanıcı sohbetini göster</label></div>
+      </div>
+    </div>
+
+    <div id="mods" class="section">
+      <div class="panel"><div class="panelhead"><div><h2>📦 Mod Yönetimi</h2><p class="muted">Mevcut modları kart görünümünde düzenle veya sil.</p></div><button class="primary" onclick="addMod()">＋ Yeni Mod</button></div>
+        <input id="modSearch" class="search" style="margin-top:15px" placeholder="Mod ara..." oninput="renderMods()">
+        <div id="modGrid" class="modgrid"></div>
+      </div>
+      <div id="modEditor" class="panel hidden"><h2 id="modEditorTitle">Yeni Mod</h2><div class="grid">
+        <div class="field"><label>Mod adı</label><input id="mName"></div><div class="field"><label>Kategori</label><input id="mCat"></div>
+        <div class="field"><label>İndirme linki</label><input id="mLink"></div><div class="field"><label>Görsel URL</label><input id="mImage"></div>
+        <div class="field"><label>Sürüm</label><input id="mVersion" value="1.0"></div><div class="field"><label>Boyut</label><input id="mSize" value="-"></div>
+        <div class="field" style="grid-column:1/-1"><label>Açıklama</label><textarea id="mDesc"></textarea></div>
+      </div><div class="actions"><button class="primary" onclick="saveMod()">💾 Modu Kaydet</button><button class="secondary" onclick="closeModEditor()">İptal</button></div></div>
+    </div>
+
+    <div id="member" class="section">
+      <div class="panel"><div class="panelhead"><div><h2>👥 Üye Modları</h2><p class="muted">Üyelerin gönderdiği modları burada incele, onayla veya reddet.</p></div><button class="secondary" onclick="loadMemberMods()">🔄 Yenile</button></div>
+        <div id="memberList" class="list"></div>
+      </div>
+    </div>
+
+    <div id="visitors" class="section">
+      <div class="panel"><div class="panelhead"><div><h2>👀 Ziyaretçiler</h2><p class="muted">Anonim ziyaretçi kayıtları.</p></div><button class="secondary" onclick="loadVisitors()">🔄 Yenile</button></div>
+        <div class="table" style="margin-top:14px"><div class="visitor"><div># / Kimlik</div><div>Son Görülme</div><div>Sayfa</div><div>Tarayıcı</div></div><div id="visitorList"></div></div>
+      </div>
+    </div>
+
+    <div id="development" class="section">
+      <div class="panel"><div class="panelhead"><div><h2>🚧 Yapım Aşaması Modları</h2><p class="muted">Geliştirdiğin projeleri, açıklamalarını ve fotoğraflarını yönet.</p></div><button class="secondary" onclick="addDev()">＋ Proje Ekle</button></div>
+        <div id="devList"></div><div class="actions"><button class="primary" onclick="saveSite()">💾 Yapım Aşamasını Kaydet</button></div>
+      </div>
+    </div>
+
+    <div id="messages" class="section">
+      <div class="panel"><h2>🔔 Bildirimler</h2><div class="grid">
+        <div class="field"><label>Bildirim 1 başlık</label><input id="notification1Title"></div><div class="field"><label>Bildirim 1 metin</label><input id="notification1Text"></div>
+        <div class="field"><label>Bildirim 2 başlık</label><input id="notification2Title"></div><div class="field"><label>Bildirim 2 metin</label><input id="notification2Text"></div>
+        <div class="field"><label>Bildirim 3 başlık</label><input id="notification3Title"></div><div class="field"><label>Bildirim 3 metin</label><input id="notification3Text"></div>
+      </div><div class="actions"><button class="primary" onclick="saveSite()">💾 Bildirimleri Kaydet</button></div></div>
+    </div>
+  </section>
+</div>
+</main>
+<div id="toast" class="toast hidden"></div>
+
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+import {getAuth,GoogleAuthProvider,signInWithPopup,onAuthStateChanged,signOut} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
+
+const firebaseConfig={
+ apiKey:"AIzaSyAw-RuOox1mHUsmBSwogrkIIguzUJYJtFw",
+ authDomain:"emir-mods.firebaseapp.com",
+ databaseURL:"https://emir-mods-default-rtdb.firebaseio.com",
+ projectId:"emir-mods",
+ storageBucket:"emir-mods.firebasestorage.app",
+ messagingSenderId:"590122713490",
+ appId:"1:590122713490:web:f08cb5982b848ed9bc14b"
+};
+const auth=getAuth(initializeApp(firebaseConfig));
+const provider=new GoogleAuthProvider();
+const API="https://emir-mods.vercel.app/api/site";
+let data=null,currentUser=null,editingId=null;
+
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));
+function toast(t){$("toast").textContent=t;$("toast").classList.remove("hidden");setTimeout(()=>$("toast").classList.add("hidden"),2500)}
+async function headers(){if(!currentUser)throw Error("Google hesabıyla giriş yapmalısın.");return{"Content-Type":"application/json","Authorization":"Bearer "+await currentUser.getIdToken(true)}}
+async function api(body){const r=await fetch(API,{method:"POST",headers:await headers(),body:JSON.stringify(body)});const j=await r.json();if(!r.ok)throw Error(j.error||"Sunucu hatası");return j}
+async function publicConfig(){const r=await fetch(API,{cache:"no-store"});if(!r.ok)throw Error("Site ayarları alınamadı.");return r.json()}
+
+$("googleBtn").onclick=async()=>{try{ $("loginMsg").textContent="Google girişi açılıyor...";await signInWithPopup(auth,provider)}catch(e){$("loginMsg").textContent=e.message||"Giriş başarısız."}};
+$("logoutBtn").onclick=()=>signOut(auth);
+
+const navKeys=["nav0","nav1","nav2","nav3","nav4","nav5","nav6","nav7","nav8"];
+$("navGrid").innerHTML=navKeys.map((k,i)=>`<div class="field"><label>Menü ${i+1}</label><input id="${k}"></div>`).join("");
+
+window.openTab=id=>{document.querySelectorAll(".section").forEach(x=>x.classList.remove("active"));$(id).classList.add("active");document.querySelectorAll(".side button").forEach(x=>x.classList.toggle("active",x.dataset.tab===id));if(id==="member")loadMemberMods();if(id==="visitors")loadVisitors()};
+document.querySelectorAll(".side button").forEach(b=>b.onclick=()=>openTab(b.dataset.tab));
+
+async function loadAll(){
+ data=await publicConfig();
+ fillSite(data.settings||{});
+ renderMods();
+ renderDev(data.settings?.developmentMods||[]);
+ $("statMods").textContent=(data.mods||[]).length;
+ $("statDev").textContent=(data.settings?.developmentMods||[]).length;
+ try{const v=await api({action:"visitors"});$("statVisitors").textContent=(v.visitors||[]).length;renderVisitors(v.visitors||[])}catch{}
+ try{const m=await api({action:"memberMods"});$("statMembers").textContent=(m.mods||[]).filter(x=>x.status==="pending").length;renderMembers(m.mods||[])}catch{}
+}
+
+function fillSite(s){
+ const keys=["siteName","discordUrl","heroTitle","heroText","youtubeTitle","youtubeText","youtubeLoginText","youtubeCheckText","youtubeStatusText","categoriesTitle","categoriesText","modsTitle","modsText","vehicleTitle","vehicleText","supportText","aboutText","contactText","paidSetupText","legalText","footerText","supportTitle","aboutTitle","contactTitle","paidSetupTitle","legalTitle","supporters","sellerName","sellerIban","sellerBank","sellerCardLink","notification1Title","notification1Text","notification2Title","notification2Text","notification3Title","notification3Text","nav0","nav1","nav2","nav3","nav4","nav5","nav6","nav7","nav8","whatsappNumber","whatsappMessage","chatTitle","supabaseUrl","supabaseAnonKey","chatWelcome","adminGoogleEmail"];
+ keys.forEach(k=>{if($(k))$(k).value=s[k]??""});
+ $("categories").value=(data.categories||[]).join("\n");
+ $("categoryCards").value=(s.categoryCards||[]).map(x=>Array.isArray(x)?x.join(" | "):x).join("\n");
+ $("whatsappEnabled").checked=s.whatsappEnabled!==false;
+ $("userChatEnabled").checked=s.userChatEnabled!==false;
+ ["notification1Title","notification1Text","notification2Title","notification2Text","notification3Title","notification3Text"].forEach(k=>{if($(k))$(k).value=s[k]||""});
+}
+
+window.saveSite=async()=>{
+ try{
+  const keys=["siteName","discordUrl","heroTitle","heroText","youtubeTitle","youtubeText","youtubeLoginText","youtubeCheckText","youtubeStatusText","categoriesTitle","categoriesText","modsTitle","modsText","vehicleTitle","vehicleText","supportText","aboutText","contactText","paidSetupText","legalText","footerText","supportTitle","aboutTitle","contactTitle","paidSetupTitle","legalTitle","supporters","sellerName","sellerIban","sellerBank","sellerCardLink","notification1Title","notification1Text","notification2Title","notification2Text","notification3Title","notification3Text","nav0","nav1","nav2","nav3","nav4","nav5","nav6","nav7","nav8","whatsappNumber","whatsappMessage","chatTitle","supabaseUrl","supabaseAnonKey","chatWelcome","adminGoogleEmail"];
+  const s={};keys.forEach(k=>{if($(k))s[k]=$(k).value});
+  s.whatsappEnabled=$("whatsappEnabled").checked;s.userChatEnabled=$("userChatEnabled").checked;
+  s.categoryCards=$("categoryCards").value.split(/\n+/).map(x=>x.trim()).filter(Boolean).map(x=>x.split("|").map(y=>y.trim()));
+  s.developmentMods=collectDev();
+  const categories=$("categories").value.split(/\n+/).map(x=>x.trim()).filter(Boolean);
+  const r=await api({action:"saveSite",payload:{settings:s,categories,mods:data.mods||[]}});
+  data=r.data;fillSite(data.settings||{});renderMods();renderDev(data.settings?.developmentMods||[]);toast("✓ Kaydedildi");
+ }catch(e){alert(e.message)}
+};
+
+function renderMods(){
+ const q=($("modSearch").value||"").toLowerCase();
+ const mods=(data?.mods||[]).filter(m=>(m.name||m.title||"").toLowerCase().includes(q)||(m.cat||m.category||"").toLowerCase().includes(q));
+ $("modGrid").innerHTML=mods.length?mods.map((m,i)=>`<div class="modcard"><img src="${esc(m.image||"")}" onerror="this.style.display='none'"><div class="modbody"><span class="tag">${esc(m.cat||m.category||"Mod")}</span><h3>${esc(m.name||m.title||"Adsız Mod")}</h3><p>${esc(m.desc||"")}</p><div class="modactions"><button onclick="editMod('${esc(String(m.id||i))}')">✏️ Düzenle</button><button onclick="deleteMod('${esc(String(m.id||i))}')">🗑️ Sil</button>${m.link?`<a href="${esc(m.link)}" target="_blank" style="padding:7px 9px;border-radius:8px;border:1px solid #2b3a42;background:#111a20;color:#fff;text-decoration:none;font-size:11px">🔗 Aç</a>`:""}</div></div></div>`).join(""):"<div class='notice'>Henüz mod bulunamadı.</div>";
+}
+window.addMod=()=>{editingId=null;$("modEditorTitle").textContent="＋ Yeni Mod";["mName","mCat","mLink","mImage","mDesc"].forEach(k=>$(k).value="");$("mVersion").value="1.0";$("mSize").value="-";$("modEditor").classList.remove("hidden");$("modEditor").scrollIntoView({behavior:"smooth"})};
+window.editMod=id=>{const m=(data.mods||[]).find(x=>String(x.id)===String(id));if(!m)return;editingId=id;$("modEditorTitle").textContent="✏️ Modu Düzenle";$("mName").value=m.name||m.title||"";$("mCat").value=m.cat||m.category||"";$("mLink").value=m.link||"";$("mImage").value=m.image||"";$("mDesc").value=m.desc||"";$("mVersion").value=m.version||"1.0";$("mSize").value=m.size||"-";$("modEditor").classList.remove("hidden");$("modEditor").scrollIntoView({behavior:"smooth"})};
+window.closeModEditor=()=>$("modEditor").classList.add("hidden");
+window.saveMod=async()=>{const m={id:editingId||("mod_"+Date.now()),name:$("mName").value.trim(),cat:$("mCat").value.trim(),link:$("mLink").value.trim(),image:$("mImage").value.trim(),desc:$("mDesc").value.trim(),version:$("mVersion").value.trim(),size:$("mSize").value.trim(),type:"free"};if(!m.name||!m.link)return alert("Mod adı ve indirme linki gerekli.");let mods=[...(data.mods||[])];const ix=mods.findIndex(x=>String(x.id)===String(editingId));if(ix>=0)mods[ix]=m;else mods.unshift(m);try{const r=await api({action:"saveSite",payload:{settings:data.settings,categories:data.categories,mods}});data=r.data;renderMods();$("modEditor").classList.add("hidden");$("statMods").textContent=mods.length;toast("✓ Mod kaydedildi")}catch(e){alert(e.message)}};
+window.deleteMod=async id=>{if(!confirm("Bu modu silmek istediğine emin misin?"))return;const mods=(data.mods||[]).filter(x=>String(x.id)!==String(id));try{const r=await api({action:"saveSite",payload:{settings:data.settings,categories:data.categories,mods}});data=r.data;renderMods();$("statMods").textContent=mods.length;toast("✓ Mod silindi")}catch(e){alert(e.message)}};
+
+function renderMembers(a){$("memberList").innerHTML=a.length?a.map(m=>`<div class="item"><div class="itemtop"><div><span class="tag">${esc(m.cat||"Mod")}</span><h3 style="margin:7px 0 3px">${esc(m.name||"Adsız Mod")}</h3><div class="muted">${esc(m.desc||"Açıklama yok")}</div><div class="muted" style="margin-top:6px;font-size:11px">Gönderen: ${esc(m.submittedBy?.email||"Gizli")} · ${m.submittedAt?new Date(m.submittedAt).toLocaleString("tr-TR"):"-"}</div></div><span class="status ${m.status||"pending"}">${esc(m.status||"pending")}</span></div><div class="actions">${m.link?`<a class="secondary" href="${esc(m.link)}" target="_blank">🔗 Linki Aç</a>`:""}${m.status==="pending"?`<button class="primary" onclick="reviewMember('${esc(m.id)}',true)">✅ Onayla</button><button class="danger" onclick="reviewMember('${esc(m.id)}',false)">❌ Reddet</button>`:""}</div></div>`).join(""):"<div class='notice'>Bekleyen üye modu yok.</div>"}
+window.loadMemberMods=async()=>{try{const r=await api({action:"memberMods"});renderMembers(r.mods||[]);$("statMembers").textContent=(r.mods||[]).filter(x=>x.status==="pending").length}catch(e){alert(e.message)}};
+window.reviewMember=async(id,approve)=>{try{await api({action:approve?"approveMemberMod":"rejectMemberMod",id});await loadMemberMods();toast(approve?"✓ Mod onaylandı":"✓ Mod reddedildi")}catch(e){alert(e.message)}};
+
+function renderVisitors(a){$("visitorList").innerHTML=a.length?a.map((v,i)=>`<div class="visitor"><div><b>${i+1}. ${esc(v.visitorId||"-")}</b></div><div>${v.lastSeen?new Date(v.lastSeen).toLocaleString("tr-TR"):"-"}</div><div>${esc(v.path||"/")}</div><div class="muted">${esc(v.userAgent||"")}</div></div>`).join(""):"<div class='notice'>Henüz ziyaretçi yok.</div>"}
+window.loadVisitors=async()=>{try{const r=await api({action:"visitors"});renderVisitors(r.visitors||[]);$("statVisitors").textContent=(r.visitors||[]).length}catch(e){alert(e.message)}};
+
+function renderDev(items){const box=$("devList");box.innerHTML="";(items||[]).forEach((x,i)=>addDev(x));}
+function addDev(item){const box=$("devList");const x=item||{id:"dev_"+Date.now()+"_"+Math.random().toString(36).slice(2),title:"",icon:"🚧",desc:"",link:"",photos:[]};const el=document.createElement("div");el.className="dev";el.dataset.id=x.id;el.innerHTML=`<div class="panelhead"><b>🚧 Yapım Aşaması #${box.children.length+1}</b><button class="danger" onclick="this.closest('.dev').remove()">Sil</button></div><div class="grid"><div class="field"><label>Proje adı</label><input class="dtitle" value="${esc(x.title)}"></div><div class="field"><label>İkon</label><input class="dicon" value="${esc(x.icon||"🚧")}"></div><div class="field" style="grid-column:1/-1"><label>Açıklama</label><textarea class="ddesc">${esc(x.desc)}</textarea></div><div class="field" style="grid-column:1/-1"><label>Bilgi linki</label><input class="dlink" value="${esc(x.link)}"></div></div><div class="field" style="margin-top:10px"><label>Fotoğraf URL'leri</label><div class="dphotos"></div><button class="secondary" onclick="addPhoto(this)">＋ Fotoğraf</button></div>`;box.appendChild(el);(x.photos||[]).forEach(p=>addPhoto(el.querySelector(".dphotos"),p));if(!(x.photos||[]).length)addPhoto(el.querySelector(".dphotos"),"")}
+window.addDev=()=>addDev();
+window.addPhoto=(target,value)=>{const pb=target?.classList?.contains("dphotos")?target:target.closest(".dev").querySelector(".dphotos");const row=document.createElement("div");row.className="devrow";row.innerHTML=`<input value="${esc(value||"")}" placeholder="https://.../foto.jpg"><button class="danger" onclick="this.parentElement.remove()">×</button>`;pb.appendChild(row)};
+function collectDev(){return [...document.querySelectorAll(".dev")].map(el=>({id:el.dataset.id,title:el.querySelector(".dtitle").value.trim(),icon:el.querySelector(".dicon").value.trim()||"🚧",desc:el.querySelector(".ddesc").value.trim(),link:el.querySelector(".dlink").value.trim(),photos:[...el.querySelectorAll(".dphotos input")].map(x=>x.value.trim()).filter(Boolean)})).filter(x=>x.title||x.desc||x.link||x.photos.length)}
+
+onAuthStateChanged(auth,async user=>{
+ currentUser=user;
+ if(!user){$("login").classList.remove("hidden");$("app").classList.add("hidden");$("logoutBtn").classList.add("hidden");$("owner").textContent="";return}
+ $("loginMsg").textContent="Google hesabı doğrulanıyor...";
+ try{await loadAll();$("login").classList.add("hidden");$("app").classList.remove("hidden");$("logoutBtn").classList.remove("hidden");$("owner").textContent=user.email||""}catch(e){await signOut(auth);$("loginMsg").textContent=e.message||"Bu hesap yönetici değil."}
+});
+</script>
+</body>
+</html>
