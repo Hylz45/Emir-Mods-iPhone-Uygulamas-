@@ -135,6 +135,42 @@ body{
   z-index:3!important;
 }
 
+
+/* ===== YENİ YÖNETİCİ ALANI: ŞEMADAKİ DÜZEN ===== */
+.admin-layout-page{background:#020605!important;padding:14px!important;overflow:auto!important}
+.admin-topbar{display:flex;justify-content:space-between;align-items:center;padding:8px 4px 14px;border-bottom:1px solid rgba(0,255,120,.25)}
+.admin-topbar h1{margin:2px 0;font-size:25px}
+.admin-kicker{font-size:11px;letter-spacing:3px;color:#00ff78;font-weight:900}
+.admin-topbar span{font-size:12px;color:#9bb4a8}
+.admin-close-new{width:40px;height:40px;border-radius:50%!important;background:#08140e!important;color:#fff!important;border:1px solid #00e66d!important}
+.admin-board-grid{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto auto auto;gap:10px;margin-top:12px}
+.admin-box{border:1px solid rgba(0,255,120,.38);border-radius:18px;padding:13px;background:linear-gradient(145deg,rgba(5,23,15,.96),rgba(3,11,18,.96));box-shadow:0 10px 30px rgba(0,0,0,.35);min-width:0}
+.box-title{display:flex;flex-direction:column;gap:3px;margin-bottom:10px}
+.box-title b{font-size:17px}.box-title small{color:#8ea79c;font-size:11px}
+.control-list,.content-actions,.four-actions,.dev-actions{display:grid;gap:7px}
+.control-list{grid-template-columns:1fr 1fr}
+.admin-box button{padding:10px 9px!important;border-radius:11px!important;background:#071a12!important;color:#eafff3!important;border:1px solid rgba(0,255,120,.3)!important;font-size:12px!important}
+.admin-box button:hover{border-color:#00ff78!important;transform:translateY(-1px)}
+.admin-live{min-height:300px}
+.live-toolbar{display:flex;gap:7px;margin-bottom:8px}
+.live-preview{height:225px;border-radius:14px;overflow:hidden;position:relative;padding:18px;background:radial-gradient(circle at 70% 20%,#123d63,#020807 58%),#020807;border:1px solid rgba(0,255,120,.3)}
+.live-glow{position:absolute;inset:0;background:linear-gradient(125deg,transparent,#00351f66,transparent);pointer-events:none}
+.live-logo{font-size:25px;font-weight:1000;position:relative}.live-logo span{color:#00f77b}
+.live-sub{font-size:10px;color:#9eb0aa;position:relative}.live-hero{margin-top:35px;font-size:18px;font-weight:1000;color:#fff;position:relative}.live-search{margin-top:15px;border:1px solid #1a6047;border-radius:18px;padding:8px;color:#aabbb4;position:relative;font-size:11px}.live-cards{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px;position:relative}.live-cards div{padding:8px;border:1px solid #0d5a3a;border-radius:9px;color:#00ff78;font-weight:800;font-size:10px}.live-cards small{color:#fff;font-weight:500}
+.admin-users p,.admin-content p{font-size:12px;line-height:1.5;color:#a9bcb3}
+.mini-status{font-size:11px;color:#00ff78;background:#03180d;border-radius:9px;padding:8px}
+.user-actions{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.four-actions{grid-template-columns:1fr 1fr}.dev-actions{grid-template-columns:1fr}
+.admin-mods{grid-column:1}.admin-development{grid-column:2}
+.hidden-admin-screen{display:none!important}
+.editor-screen{grid-column:1 / -1;display:none}
+.editor-screen.active{display:block!important}
+.editor-head{display:flex;justify-content:space-between;gap:10px;align-items:center}.editor-head h2{font-size:17px;margin:0}.editor-head p{font-size:11px;color:#91aaa0;margin:4px 0}
+.editor-canvas{height:500px;position:relative;margin-top:10px;border:1px dashed #1a7650;border-radius:16px;background:linear-gradient(160deg,#03100b,#020609);overflow:hidden}
+.edit-object{position:absolute;border:2px solid #00f276;border-radius:13px;background:rgba(0,31,18,.74);display:flex;align-items:center;justify-content:center;color:#eafff3;text-align:center;font-size:12px;cursor:move;user-select:none;min-width:65px;min-height:38px}
+.edit-object.selected{box-shadow:0 0 0 2px rgba(0,255,120,.2),0 0 25px rgba(0,255,120,.2)}
+.edit-object i{position:absolute;right:3px;bottom:3px;font-style:normal;color:#00ff78;font-size:12px}
+
 </style>
 
 <style id="emir-phone-background">
@@ -217,28 +253,125 @@ body.exact-shell{min-height:100vh!important;overflow-x:hidden!important}
     <div id="adminEntry" class="item" style="display:none"><strong>👑 Yönetim Paneli</strong><p class="muted">Yönetici hesabına özel.</p><button onclick="openAdminPanel()">🛠️ Yönetim Merkezi</button></div>
   </section>
 
-  <section id="admin" class="page exact-subpage">
-    <div class="admin-close"><button onclick="show('home')">✕ Kapat</button></div>
-    <div class="hero"><div class="tag">👑 YÖNETİCİ</div><h1>Emir Mods Yönetim Merkezi</h1><p id="adminState" class="muted">Yönetici hesabı doğrulanıyor...</p></div>
-    <div id="adminLogin" class="item"><strong>🔐 Yönetici Girişi</strong><p class="muted">Bu alan yalnızca yönetici hesabına açıktır.</p><button onclick="login()">Google ile Giriş</button></div>
-    <div id="adminPanel" style="display:none">
-      <div class="status ok"><b>🟢 Yönetim aktif</b><div id="adminEmail" class="muted"></div></div>
-      <div class="admin-grid">
-        <button class="admin-tile" onclick="adminTab('overview')">📊<b>Genel Bakış</b><small>Site durumu</small></button>
-        <button class="admin-tile" onclick="adminTab('mods')">📦<b>Mod Yönetimi</b><small>Modları düzenle</small></button>
-        <button class="admin-tile" onclick="adminTab('members')">📨<b>Üye Modları</b><small>Başvuruları incele</small></button>
-        <button class="admin-tile" onclick="adminTab('site')">⚙️<b>Site Ayarları</b><small>Ana site verileri</small></button>
-        <button class="admin-tile" onclick="adminTab('messages')">💬<b>Mesajlar</b><small>Kullanıcı mesajları</small></button>
-        <button class="admin-tile" onclick="adminTab('visitors')">👀<b>Ziyaretçiler</b><small>Son ziyaretler</small></button>
-      </div>
-      <div id="adm-overview" class="admin-screen active"><div class="item"><h3>📊 Genel Bakış</h3><div class="admin-stats"><div><b id="admModCount">0</b><small>Mod</small></div><div><b id="admPendingCount">0</b><small>Bekleyen</small></div><div><b id="admVisitorCount">0</b><small>Ziyaretçi</small></div></div><button onclick="refreshAdmin()">🔄 Verileri Yenile</button></div></div>
-      <div id="adm-mods" class="admin-screen"><div class="item"><h3>📦 Mod Yönetimi</h3><input id="admModName" class="admin-input" placeholder="Mod adı"><input id="admModCategory" class="admin-input" placeholder="Kategori"><input id="admModVersion" class="admin-input" placeholder="Sürüm"><input id="admModSize" class="admin-input" placeholder="Boyut"><input id="admModImage" class="admin-input" placeholder="Görsel URL"><input id="admModLink" class="admin-input" placeholder="İndirme linki"><textarea id="admModDesc" class="admin-input" placeholder="Açıklama"></textarea><button onclick="addAdminMod()">➕ Modu Ekle</button><div id="admModList" class="list"></div></div></div>
-      <div id="adm-members" class="admin-screen"><div class="item"><h3>📨 Üye Mod Başvuruları</h3><button onclick="loadMemberMods()">🔄 Başvuruları Yenile</button><div id="memberList" class="list"></div></div></div>
-      <div id="adm-site" class="admin-screen"><div class="item"><h3>⚙️ Site Ayarları</h3><input id="admSiteTitle" class="admin-input" placeholder="Site başlığı"><input id="admSiteSubtitle" class="admin-input" placeholder="Site alt başlığı"><input id="admYoutube" class="admin-input" placeholder="YouTube kanal linki"><input id="admWhatsapp" class="admin-input" placeholder="WhatsApp numarası"><textarea id="admWelcome" class="admin-input" placeholder="Karşılama yazısı"></textarea><button onclick="saveAdminSite()">💾 Site Ayarlarını Kaydet</button></div></div>
-      <div id="adm-messages" class="admin-screen"><div class="item"><h3>💬 Mesajlar</h3><button onclick="loadMessages()">🔄 Mesajları Yenile</button><div id="messageListAdmin" class="list"></div></div></div>
-      <div id="adm-visitors" class="admin-screen"><div class="item"><h3>👀 Ziyaretçiler</h3><button onclick="loadVisitorsAdmin()">🔄 Ziyaretçileri Yenile</button><div id="visitorListAdmin" class="list"></div></div></div>
+  
+<section id="admin" class="page exact-subpage admin-layout-page">
+  <div class="admin-topbar">
+    <div>
+      <div class="admin-kicker">EMIR MODS</div>
+      <h1>Yönetici Alanı</h1>
+      <span id="adminState">Yönetici hesabı doğrulanıyor...</span>
     </div>
-  </section>
+    <button class="admin-close-new" onclick="show('home')">✕</button>
+  </div>
+
+  <div id="adminLogin" class="admin-login-new">
+    <div class="admin-login-card">
+      <div class="admin-big-icon">👑</div>
+      <h2>Yönetici Girişi</h2>
+      <p>Bu alan yalnızca yönetici hesabına açıktır.</p>
+      <button onclick="login()">Google ile Giriş</button>
+    </div>
+  </div>
+
+  <div id="adminPanel" class="admin-board" style="display:none">
+    <div class="admin-board-grid">
+      <section class="admin-box admin-management">
+        <div class="box-title"><b>🛠️ Yönetim Paneli</b><small>Her şeyi buradan yönet</small></div>
+        <div class="control-list">
+          <button onclick="adminTab('overview')">📊 Genel Bakış</button>
+          <button onclick="adminTab('mods')">📦 Modları Yönet</button>
+          <button onclick="adminTab('members')">👥 Üye Modları</button>
+          <button onclick="adminTab('site')">⚙️ Site İçeriği</button>
+          <button onclick="adminTab('messages')">💬 Mesajlar</button>
+          <button onclick="adminTab('visitors')">👀 Ziyaretçiler</button>
+          <button onclick="adminTab('editor')">↔️ Taşı / Büyüt / Küçült</button>
+        </div>
+      </section>
+
+      <section class="admin-box admin-live">
+        <div class="box-title">
+          <b>🌐 Canlı Site</b>
+          <small>Yaptığın değişiklikleri kontrol et</small>
+        </div>
+        <div class="live-toolbar">
+          <button onclick="openLiveSite()">↗ Canlı siteyi aç</button>
+          <button onclick="adminTab('editor')">✋ Düzenleme Modu</button>
+        </div>
+        <div class="live-preview">
+          <div class="live-glow"></div>
+          <div class="live-logo">EMİR <span>MODS</span></div>
+          <div class="live-sub">GTA V • LSPDFR • Mod Merkezi</div>
+          <div class="live-hero">SINIRSIZ MOD DENEYİMİ!</div>
+          <div class="live-search">🔍 Mod ara... (LSPDFR, Araç, Plugin, Harita...)</div>
+          <div class="live-cards">
+            <div>LSPDFR<br><small>Türkçe Polis Paketi</small></div>
+            <div>PDComp<br><small>Türkçe</small></div>
+            <div>Araç<br><small>Polis Aracı Paketi</small></div>
+            <div>Paket<br><small>Emir Mods Özel Paket</small></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="admin-box admin-users">
+        <div class="box-title"><b>👤 Google Kullanıcılar</b><small>Üyeler ve içerik sahipleri</small></div>
+        <div class="user-actions">
+          <button onclick="adminTab('members')">Üyeleri Gör</button>
+          <button onclick="adminTab('messages')">Mesajları Gör</button>
+        </div>
+        <p>Google ile giriş yapan kullanıcıların mod gönderileri, durumları ve iletişim kayıtları buradan yönetilecek.</p>
+        <div class="mini-status">🟢 Google bağlantısı aktif</div>
+      </section>
+
+      <section class="admin-box admin-content">
+        <div class="box-title"><b>✏️ Site İçeriği</b><small>İsim, yazı, link ve içerik düzenle</small></div>
+        <div class="content-actions">
+          <button onclick="adminTab('site')">📝 Yazıları / Linkleri Düzenle</button>
+          <button onclick="adminTab('mods')">🔗 Mod Linklerini Düzenle</button>
+          <button onclick="adminTab('editor')">🖼️ Görüntü / Kategori Düzenle</button>
+        </div>
+        <p>Site içindeki başlık, açıklama, bağlantı, görsel ve kategori verileri yönetimden değiştirilebilir.</p>
+      </section>
+
+      <section class="admin-box admin-mods">
+        <div class="box-title"><b>🚗 Mod İşlemleri</b><small>Ekle • Onayla • İzle • Ziyaretçi</small></div>
+        <div class="four-actions">
+          <button onclick="adminTab('mods')">➕ Araç / Mod Ekle</button>
+          <button onclick="adminTab('members')">✅ Mod Onayla</button>
+          <button onclick="adminTab('overview')">📈 İzleme</button>
+          <button onclick="adminTab('visitors')">👀 Ziyaretçiler</button>
+        </div>
+      </section>
+
+      <section class="admin-box admin-development">
+        <div class="box-title"><b>🚧 Yapım Aşamasında</b><small>Kategori ve görüntü ekleme</small></div>
+        <div class="dev-actions">
+          <button onclick="adminTab('site')">📂 Kategori Ekle / Düzenle</button>
+          <button onclick="adminTab('mods')">🖼️ Görüntü Ekle</button>
+          <button onclick="adminTab('editor')">↔️ Alanları Taşı / Boyutlandır</button>
+        </div>
+      </section>
+    </div>
+
+    <section id="adm-overview" class="admin-screen active hidden-admin-screen"><div class="item"><h3>Genel Bakış</h3><div class="admin-stats"><div><b id="admModCount">0</b><small>Mod</small></div><div><b id="admPendingCount">0</b><small>Bekleyen</small></div><div><b id="admVisitorCount">0</b><small>Ziyaretçi</small></div></div><button onclick="refreshAdmin()">🔄 Verileri Yenile</button></div></section>
+    <section id="adm-mods" class="admin-screen hidden-admin-screen"><div class="item"><h3>📦 Mod Yönetimi</h3><input id="admModName" class="admin-input" placeholder="Mod adı"><input id="admModCategory" class="admin-input" placeholder="Kategori"><input id="admModVersion" class="admin-input" placeholder="Sürüm"><input id="admModSize" class="admin-input" placeholder="Boyut"><input id="admModImage" class="admin-input" placeholder="Görsel URL"><input id="admModLink" class="admin-input" placeholder="İndirme linki"><textarea id="admModDesc" class="admin-input" placeholder="Açıklama"></textarea><button onclick="addAdminMod()">➕ Modu Ekle</button><div id="admModList" class="list"></div></div></section>
+    <section id="adm-members" class="admin-screen hidden-admin-screen"><div class="item"><h3>📨 Üye Mod Başvuruları</h3><button onclick="loadMemberMods()">🔄 Başvuruları Yenile</button><div id="memberList" class="list"></div></div></section>
+    <section id="adm-site" class="admin-screen hidden-admin-screen"><div class="item"><h3>⚙️ Site Ayarları</h3><input id="admSiteTitle" class="admin-input" placeholder="Site başlığı"><input id="admSiteSubtitle" class="admin-input" placeholder="Site alt başlığı"><input id="admYoutube" class="admin-input" placeholder="YouTube kanal linki"><input id="admWhatsapp" class="admin-input" placeholder="WhatsApp numarası"><textarea id="admWelcome" class="admin-input" placeholder="Karşılama yazısı"></textarea><button onclick="saveAdminSite()">💾 Site Ayarlarını Kaydet</button></div></section>
+    <section id="adm-messages" class="admin-screen hidden-admin-screen"><div class="item"><h3>💬 Mesajlar</h3><button onclick="loadMessages()">🔄 Mesajları Yenile</button><div id="messageListAdmin" class="list"></div></div></section>
+    <section id="adm-visitors" class="admin-screen hidden-admin-screen"><div class="item"><h3>👀 Ziyaretçiler</h3><button onclick="loadVisitorsAdmin()">🔄 Ziyaretçileri Yenile</button><div id="visitorListAdmin" class="list"></div></div></section>
+
+    <section id="adm-editor" class="admin-screen editor-screen">
+      <div class="editor-head"><div><h2>↔️ Site Düzenleme Modu</h2><p>Bu modda seçtiğin alanları taşıyıp büyütüp küçültebileceğin yapı.</p></div><button onclick="saveEditorLayout()">💾 Düzeni Kaydet</button></div>
+      <div id="editorCanvas" class="editor-canvas">
+        <div class="edit-object selected" data-name="logo" style="left:6%;top:5%;width:36%;height:12%"><b>EMİR MODS</b><i>↔</i></div>
+        <div class="edit-object" data-name="hero" style="left:6%;top:20%;width:88%;height:25%"><b>GTA V MODLARI / HERO ALANI</b><i>↔</i></div>
+        <div class="edit-object" data-name="search" style="left:6%;top:48%;width:88%;height:9%"><b>🔍 ARAMA</b><i>↔</i></div>
+        <div class="edit-object" data-name="categories" style="left:6%;top:60%;width:88%;height:13%"><b>📦 KATEGORİLER</b><i>↔</i></div>
+        <div class="edit-object" data-name="featured" style="left:6%;top:76%;width:88%;height:16%"><b>🔥 GÜNÜN MODU</b><i>↔</i></div>
+      </div>
+    </section>
+  </div>
+</section>
+
 </div>
 <div id="toast"></div>
 <script type="module">
@@ -384,5 +517,35 @@ window.loadVisitorsAdmin=async function(){
 };
 
 window.loadMessages=async()=>{let b=$("messageList");b.innerHTML='<div class="item">Mesajlar kontrol ediliyor...</div>';try{let cfg=await fetch(API+"?action=siteData").then(r=>r.json());let s=cfg.data?.settings||{};if(!s.supabaseUrl||!s.supabaseAnonKey)throw Error("Supabase bağlantısı Yönetim Panelinden ayarlanmamış.");let r=await fetch(s.supabaseUrl+"/rest/v1/emir_messages?select=*&order=created_at.desc",{headers:{apikey:s.supabaseAnonKey,Authorization:"Bearer "+s.supabaseAnonKey}});let d=await r.json();if(!r.ok)throw Error(d.message||"Mesaj tablosuna erişilemedi.");b.innerHTML=Array.isArray(d)&&d.length?d.map(m=>`<div class="msg"><strong>${esc(m.name||m.email||"Kullanıcı")}</strong><p>${esc(m.message||m.content||"")}</p><span class="muted">${esc(m.created_at||"")}</span></div>`).join(""):'<div class="item">📭 Mesaj bulunamadı.</div>'}catch(e){b.innerHTML=`<div class="item">⚠️ ${esc(e.message)}<br><br><span class="muted">Mesaj tablosu RLS ile korunuyorsa bu alan için sunucu tarafında güvenli mesaj API'si eklememiz gerekir.</span></div>`}};
+
+function openLiveSite(){ window.open("https://emir-mods.vercel.app/","_blank"); }
+function saveEditorLayout(){
+  const data=[...document.querySelectorAll("#editorCanvas .edit-object")].map(x=>({name:x.dataset.name,left:x.style.left,top:x.style.top,width:x.style.width,height:x.style.height}));
+  localStorage.setItem("emirModsEditorLayout",JSON.stringify(data));
+  toast("Düzen yerel olarak kaydedildi. API'ye bağlama aşamasında bu düzen siteye aktarılacak.");
+}
+(function initEditor(){
+  const canvas=document.getElementById("editorCanvas"); if(!canvas) return;
+  let active=null, ox=0, oy=0, base=null;
+  canvas.addEventListener("pointerdown",e=>{
+    const el=e.target.closest(".edit-object"); if(!el) return;
+    active=el; el.classList.add("selected"); [...canvas.children].forEach(x=>{if(x!==el)x.classList.remove("selected")});
+    const r=el.getBoundingClientRect(); base=canvas.getBoundingClientRect(); ox=e.clientX-r.left; oy=e.clientY-r.top; el.setPointerCapture?.(e.pointerId);
+  });
+  canvas.addEventListener("pointermove",e=>{
+    if(!active) return;
+    const x=Math.max(0,Math.min(base.width-active.offsetWidth,e.clientX-base.left-ox));
+    const y=Math.max(0,Math.min(base.height-active.offsetHeight,e.clientY-base.top-oy));
+    active.style.left=(x/base.width*100)+"%"; active.style.top=(y/base.height*100)+"%";
+  });
+  canvas.addEventListener("pointerup",()=>active=null);
+  canvas.addEventListener("dblclick",e=>{
+    const el=e.target.closest(".edit-object"); if(!el) return;
+    const w=prompt("Genişlik (%):",parseFloat(el.style.width)||50), h=prompt("Yükseklik (%):",parseFloat(el.style.height)||15);
+    if(w) el.style.width=Math.max(8,Math.min(96,Number(w)))+"%";
+    if(h) el.style.height=Math.max(6,Math.min(80,Number(h)))+"%";
+  });
+})();
+
 </script>
 </body></html>
