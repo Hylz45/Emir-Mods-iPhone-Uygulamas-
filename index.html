@@ -1,3 +1,4 @@
+```
 <!doctype html>
 <html lang="tr">
 <head>
@@ -41,100 +42,7 @@ border:1px solid rgba(0,255,102,.32)!important;box-shadow:0 12px 40px rgba(0,0,0
 .admin-close button{border:1px solid #245d39;background:#08120d;color:#fff;border-radius:12px;padding:10px 14px;font-weight:900}
 
 
-/* ===== EMIR MODS FINAL TELEFON TEMASI ===== */
-body{
-  margin:0!important;
-  background:#020604!important;
-  color:#fff!important;
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif!important;
-}
-.phone-app{
-  width:min(100vw,932px)!important;
-  min-height:100vh!important;
-  margin:0 auto!important;
-  position:relative!important;
-  background:#020604!important;
-}
-.reference-ui{
-  display:block!important;
-  width:100%!important;
-  height:auto!important;
-  position:relative!important;
-  z-index:1!important;
-}
-.hotspots{
-  position:absolute!important;
-  inset:0!important;
-  z-index:3!important;
-}
-/* Referans görselin bütün düzenini koru; işlevler görünümü bozmasın. */
-.hotspot{
-  background:transparent!important;
-  border:0!important;
-  color:transparent!important;
-  box-shadow:none!important;
-}
-.search-hotspot{
-  background:rgba(0,0,0,.01)!important;
-  color:transparent!important;
-  border:0!important;
-}
-.search-hotspot:focus{
-  color:#fff!important;
-  background:rgba(0,0,0,.22)!important;
-  outline:2px solid rgba(0,255,102,.55)!important;
-}
-.search-hotspot::placeholder{color:rgba(255,255,255,.65)!important}
-.functional-pages{display:none!important}
-
-/* Yönetim ekranı açıldığında tema ile uyumlu modal */
-#admin{
-  background:rgba(0,0,0,.72)!important;
-  backdrop-filter:blur(7px)!important;
-}
-#admin .hero,#admin .item,#admin .status{
-  background:rgba(3,12,9,.93)!important;
-  border:1px solid rgba(0,255,102,.42)!important;
-  border-radius:18px!important;
-  box-shadow:0 15px 45px rgba(0,0,0,.45)!important;
-}
-#admin .admin-tile{
-  background:linear-gradient(135deg,rgba(0,35,20,.95),rgba(2,13,20,.95))!important;
-  border:1px solid rgba(0,255,102,.38)!important;
-  border-radius:16px!important;
-}
-#admin .admin-tile:hover{transform:translateY(-2px)}
-#admin button:not(.hotspot){
-  background:#00f56a!important;
-  color:#00150a!important;
-  border:0!important;
-  border-radius:12px!important;
-  font-weight:900!important;
-}
-#admin .danger{background:#c92f3b!important;color:#fff!important}
-#admin .secondary{background:#0b1713!important;color:#fff!important;border:1px solid #26563a!important}
-
-
-/* ===== EXACT USER-APPROVED EMIR MODS HOME THEME ===== */
-body{
-  background:#020604!important;
-}
-.phone-app{
-  background:#020604!important;
-}
-.reference-ui{
-  display:block!important;
-  width:100%!important;
-  height:auto!important;
-  position:relative!important;
-  z-index:1!important;
-}
-.hotspots{
-  position:absolute!important;
-  inset:0!important;
-  z-index:3!important;
-}
-
+/* Final telefon tema override kaldırıldı: ilk tema korunuyor. */
 </style>
 
 <style id="emir-phone-background">
@@ -176,18 +84,6 @@ body.exact-shell{min-height:100vh!important;overflow-x:hidden!important}
 #toast{position:fixed;left:16px;right:16px;bottom:18px;padding:13px;background:#101a14;border:1px solid #245e34;border-radius:13px;display:none;text-align:center;z-index:100}
 @media(max-width:600px){#appExact{width:100%}}
 </style>
-
-<style id="emir-click-layer-fix">
-.page.exact-home:not(.active),
-.page.exact-subpage:not(.active){display:none!important}
-#admin.active{position:relative!important;z-index:10000!important}
-#admin.active *{pointer-events:auto}
-#admin.active .admin-board,
-#admin.active .admin-board-grid,
-#admin.active .admin-box,
-#admin.active button{position:relative;z-index:10001}
-</style>
-
 </head>
 
 <body class="exact-shell">
@@ -229,7 +125,8 @@ body.exact-shell{min-height:100vh!important;overflow-x:hidden!important}
     <div id="adminEntry" class="item" style="display:none"><strong>👑 Yönetim Paneli</strong><p class="muted">Yönetici hesabına özel.</p><button onclick="openAdminPanel()">🛠️ Yönetim Merkezi</button></div>
   </section>
 
-  <section id="admin" class="page exact-subpage admin-layout-page">
+  
+<section id="admin" class="page exact-subpage admin-layout-page">
   <div class="admin-topbar">
     <div>
       <div class="admin-kicker">EMIR MODS</div>
@@ -510,7 +407,7 @@ window.renameCategory=async i=>{const old=adminData.categories[i];const v=prompt
 window.removeCategory=async i=>{const old=adminData.categories[i];if(!confirm(`“${old}” kategorisi silinsin mi?`))return;adminData.categories.splice(i,1);await saveAdminCatalog();renderCategories()};
 
 window.openLiveSite=function(){ window.open("https://emir-mods.vercel.app/","_blank"); };
-window.saveEditorLayout=async function(){
+async function saveEditorLayout(){
   const data=[...document.querySelectorAll("#editorCanvas .edit-object")].map(x=>({name:x.dataset.name,left:x.style.left,top:x.style.top,width:x.style.width,height:x.style.height}));
   localStorage.setItem("emirModsEditorLayout",JSON.stringify(data));
   try{await apiPost({action:"saveEditorLayout",layout:data});toast("Düzen canlı site ayarlarına kaydedildi ✅");}
