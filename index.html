@@ -1,3 +1,4 @@
+```
 <!doctype html>
 <html lang="tr">
 <head>
@@ -400,7 +401,7 @@ body.exact-shell{min-height:100vh!important;overflow-x:hidden!important}
 <script type="module">
 import {initializeApp,getApps} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
 import {getAuth,GoogleAuthProvider,signInWithPopup,onAuthStateChanged,signOut} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
-const API="https://emir-mods.vercel.app/api/site";
+const API="/api/site";
 const OWNER="onurkayrakli45@gmail.com";
 const config={apiKey:"AIzaSyAw-RuOox1mHUsmBSwogrkIIguzUJYJtFw",authDomain:"emir-mods.firebaseapp.com",projectId:"emir-mods",storageBucket:"emir-mods.firebasestorage.app",messagingSenderId:"590122713490",appId:"1:590122713490:web:f08cb5982b848ed9bc14b"};
 const app=getApps().find(a=>a.name==="emirPhone")||initializeApp(config,"emirPhone"),auth=getAuth(app);
@@ -586,3 +587,4 @@ async function saveEditorLayout(){
 
 </script>
 </body></html>
+```
