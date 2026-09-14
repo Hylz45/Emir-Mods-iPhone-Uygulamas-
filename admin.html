@@ -220,7 +220,21 @@ window.closeModEditor=()=>$("modEditor").classList.add("hidden");
 window.saveMod=async()=>{const m={id:editingId||("mod_"+Date.now()),name:$("mName").value.trim(),cat:$("mCat").value.trim(),link:$("mLink").value.trim(),image:$("mImage").value.trim(),desc:$("mDesc").value.trim(),version:$("mVersion").value.trim(),size:$("mSize").value.trim(),type:"free"};if(!m.name||!m.link)return alert("Mod adı ve indirme linki gerekli.");let mods=[...(data.mods||[])];const ix=mods.findIndex(x=>String(x.id)===String(editingId));if(ix>=0)mods[ix]=m;else mods.unshift(m);try{const r=await api({action:"saveSite",payload:{settings:data.settings,categories:data.categories,mods}});data=r.data;renderMods();$("modEditor").classList.add("hidden");$("statMods").textContent=mods.length;toast("✓ Mod kaydedildi")}catch(e){alert(e.message)}};
 window.deleteMod=async id=>{if(!confirm("Bu modu silmek istediğine emin misin?"))return;const mods=(data.mods||[]).filter(x=>String(x.id)!==String(id));try{const r=await api({action:"saveSite",payload:{settings:data.settings,categories:data.categories,mods}});data=r.data;renderMods();$("statMods").textContent=mods.length;toast("✓ Mod silindi")}catch(e){alert(e.message)}};
 
-function renderMembers(a){$("memberList").innerHTML=a.length?a.map(m=>`<div class="item"><div class="itemtop"><div><span class="tag">${esc(m.cat||"Mod")}</span><h3 style="margin:7px 0 3px">${esc(m.name||"Adsız Mod")}</h3><div class="muted">${esc(m.desc||"Açıklama yok")}</div><div class="muted" style="margin-top:6px;font-size:11px">Gönderen: ${esc(m.submittedBy?.email||"Gizli")} · ${m.submittedAt?new Date(m.submittedAt).toLocaleString("tr-TR"):"-"}</div></div><span class="status ${m.status||"pending"}">${esc(m.status||"pending")}</span></div><div class="actions">${m.link?`<a class="secondary" href="${esc(m.link)}" target="_blank">🔗 Linki Aç</a>`:""}${m.status==="pending"?`<button class="primary" onclick="reviewMember('${esc(m.id)}',true)">✅ Onayla</button><button class="danger" onclick="reviewMember('${esc(m.id)}',false)">❌ Reddet</button>`:""}</div></div>`).join(""):"<div class='notice'>Bekleyen üye modu yok.</div>"}
+function memberImages(m){
+  const a=[];
+  if(Array.isArray(m?.images)) a.push(...m.images);
+  if(m?.image && !a.includes(m.image)) a.unshift(m.image);
+  return a.filter(Boolean).slice(0,5);
+}
+function renderMembers(a){
+  $("memberList").innerHTML=a.length?a.map(m=>{
+    const imgs=memberImages(m);
+    const gallery=imgs.length
+      ? `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:14px">${imgs.map((u,i)=>`<a href="${esc(u)}" target="_blank" rel="noopener"><img src="${esc(u)}" alt="Üye modu fotoğrafı ${i+1}" loading="lazy" style="width:100%;height:170px;object-fit:cover;border-radius:12px;border:1px solid #263a42;background:#050809;display:block" onerror="this.parentElement.style.display='none'"></a>`).join("")}</div>`
+      : `<div class="notice">📷 Bu üye modunda kayıtlı fotoğraf bulunamadı.</div>`;
+    return `<div class="item"><div class="itemtop"><div><span class="tag">${esc(m.cat||"Mod")}</span><h3 style="margin:7px 0 3px">${esc(m.name||"Adsız Mod")}</h3><div class="muted">${esc(m.desc||"Açıklama yok")}</div><div class="muted" style="margin-top:6px;font-size:11px">Gönderen: ${esc(m.submittedBy?.email||"Gizli")} · ${m.submittedAt?new Date(m.submittedAt).toLocaleString("tr-TR"):"-"}</div></div><span class="status ${m.status||"pending"}">${esc(m.status||"pending")}</span></div>${gallery}<div class="actions">${m.link?`<a class="secondary" href="${esc(m.link)}" target="_blank" rel="noopener">🔗 Linki Aç</a>`:""}${m.status==="pending"?`<button class="primary" onclick="reviewMember('${esc(m.id)}',true)">✅ Onayla</button><button class="danger" onclick="reviewMember('${esc(m.id)}',false)">❌ Reddet</button>`:""}</div></div>`;
+  }).join(""):"<div class='notice'>Bekleyen üye modu yok.</div>";
+}
 window.loadMemberMods=async()=>{try{const r=await api({action:"memberMods"});renderMembers(r.mods||[]);$("statMembers").textContent=(r.mods||[]).filter(x=>x.status==="pending").length}catch(e){alert(e.message)}};
 window.reviewMember=async(id,approve)=>{try{await api({action:approve?"approveMemberMod":"rejectMemberMod",id});await loadMemberMods();toast(approve?"✓ Mod onaylandı":"✓ Mod reddedildi")}catch(e){alert(e.message)}};
 
