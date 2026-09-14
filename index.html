@@ -442,7 +442,7 @@ window.review=async(id,ok)=>{try{let rejectionReason="";if(!ok){rejectionReason=
 
 let adminData={mods:[],settings:{},categories:[],visitors:[],users:[]};
 
-window.adminTab=function(id){
+window.adminTab=window.adminTab||function(id){
   document.querySelectorAll(".admin-screen").forEach(x=>x.classList.remove("active"));
   const el=$("adm-"+id); if(el)el.classList.add("active");
   if(id==="mods")renderAdminMods();
@@ -555,7 +555,7 @@ window.addCategory=async()=>{const v=$("admCategoryNew").value.trim();if(!v)retu
 window.renameCategory=async i=>{const old=adminData.categories[i];const v=prompt("Kategori adı:",old);if(v===null)return;if(!v.trim())return;adminData.categories[i]=v.trim();await saveAdminCatalog();renderCategories()};
 window.removeCategory=async i=>{const old=adminData.categories[i];if(!confirm(`“${old}” kategorisi silinsin mi?`))return;adminData.categories.splice(i,1);await saveAdminCatalog();renderCategories()};
 
-function openLiveSite(){ window.open("https://emir-mods.vercel.app/","_blank"); }
+window.openLiveSite=function(){ window.open("https://emir-mods.vercel.app/","_blank"); };
 async function saveEditorLayout(){
   const data=[...document.querySelectorAll("#editorCanvas .edit-object")].map(x=>({name:x.dataset.name,left:x.style.left,top:x.style.top,width:x.style.width,height:x.style.height}));
   localStorage.setItem("emirModsEditorLayout",JSON.stringify(data));
